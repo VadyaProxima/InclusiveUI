@@ -1,34 +1,3 @@
-import { colors } from '../colors'
-
-const disabledBlue = 'rgba(51, 141, 236, 0.4)' // colors.blue[500] с 40% прозрачностью
-const disabledGray = 'rgba(179, 198, 247, 0.4)' // colors.gray[100] с 40% прозрачностью
-const disabledRed = 'rgba(255, 107, 107, 0.4)' // colors.red[500] с 40% прозрачностью
-export const buttonBackgroundColors = {
-	primary: {
-		default: colors.blue[500],
-		hover: colors.blue[600],
-		active: colors.blue[700],
-		disabled: disabledBlue,
-	},
-	secondary: {
-		default: colors.gray[100],
-		hover: colors.gray[200],
-		active: colors.gray[300],
-		disabled: disabledGray,
-	},
-	danger: {
-		default: colors.red[500],
-		hover: colors.red[600],
-		active: colors.red[700],
-		disabled: disabledRed,
-	},
-}
-
-export const buttonTextColors = {
-	white: colors.gray[50],
-	black: colors.gray[900],
-}
-
 export const buttonTypography = {
 	desktop: {
 		fontSize: {
@@ -72,17 +41,17 @@ export const buttonWidths = {
 	desktop: {
 		large: '160px',
 		medium: '120px',
-		small: '90px',
+		small: '100px',
 	},
 	tablet: {
 		large: '140px',
 		medium: '100px',
-		small: '80px',
+		small: '95px',
 	},
 	mobile: {
 		large: '120px',
-		medium: '80px',
-		small: '60px',
+		medium: '85px',
+		small: '90px',
 	},
 	iconOnly: {
 		desktop: {
@@ -179,21 +148,9 @@ export const buttonPadding = {
 }
 
 export const buttonBorderWidth = {
-	desktop: {
-		large: '6px',
-		medium: '4px',
-		small: '2px',
-	},
-	tablet: {
-		large: '5px',
-		medium: '3px',
-		small: '1px',
-	},
-	mobile: {
-		large: '4px',
-		medium: '2px',
-		small: '1px',
-	},
+	desktop: '3px',
+	tablet: '2px',
+	mobile: '2px',
 }
 
 export const buttonBorderRadius = {
