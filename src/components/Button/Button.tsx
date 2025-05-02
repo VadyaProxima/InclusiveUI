@@ -5,27 +5,37 @@ import { Theme } from '../../theme'
 import {
 	buttonBorderRadius,
 	buttonBorderWidth,
+	buttonGap,
 	buttonHeights,
 	buttonPadding,
 	buttonTypography,
 	buttonWidths,
+	iconSizes,
 } from '../../tokens/Buttons'
 
-export interface ButtonProps {
-	label?: string
+export interface ButtonProps
+	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	children?: React.ReactNode
 	onClick?: () => void
 	variant?: 'primary' | 'default' | 'danger' | 'text'
 	size?: 'small' | 'medium' | 'large'
 	disabled?: boolean
+	icon?: React.ReactNode
+	iconPosition?: 'left' | 'right'
 }
 
-// Добавляем тип для пропсов StyledButton, включая theme
-interface StyledButtonProps extends ButtonProps {
+// Добавляем тип для пропсов StyledButton, включая theme и новые пропсы
+interface StyledButtonProps extends Omit<ButtonProps, 'children' | 'label'> {
 	theme: Theme
+	hasIcon?: boolean
+	hasChildren?: boolean
 }
 
 // Styled-component для кнопки с использованием динамических стилей
 const StyledButton = styled.button<StyledButtonProps>`
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	cursor: pointer;
 	transition: 0.3s ease;
 	white-space: nowrap;
@@ -33,31 +43,65 @@ const StyledButton = styled.button<StyledButtonProps>`
 	box-shadow: none;
 	outline: none;
 
-	/* Mobile-first: Стили по умолчанию для мобильных */
-	${({ size = 'medium' }) => css`
-		min-width: ${buttonWidths.mobile[size]};
+	/* Define base styles first */
+	${({ size = 'medium', hasIcon, hasChildren }) => css`
+		min-width: ${hasIcon && !hasChildren
+			? buttonWidths.iconOnly.mobile[size]
+			: buttonWidths.mobile[size]};
 		min-height: ${buttonHeights.mobile[size]};
-		font-size: ${buttonTypography.mobile.fontSize[size]};
+		padding-top: ${hasIcon && !hasChildren
+			? buttonPadding.mobile.iconOnly.vertical
+			: buttonPadding.mobile[size].vertical};
+		padding-bottom: ${hasIcon && !hasChildren
+			? buttonPadding.mobile.iconOnly.vertical
+			: buttonPadding.mobile[size].vertical};
+		padding-left: ${hasIcon && !hasChildren
+			? buttonPadding.mobile.iconOnly.horizontal
+			: buttonPadding.mobile[size].horizontal};
+		padding-right: ${hasIcon && !hasChildren
+			? buttonPadding.mobile.iconOnly.horizontal
+			: buttonPadding.mobile[size].horizontal};
+		gap: ${hasIcon && hasChildren ? buttonGap.mobile[size] : '0'};
+		& > svg {
+			width: ${iconSizes.mobile[size]};
+			height: ${iconSizes.mobile[size]};
+		}
+		font-size: ${hasIcon && !hasChildren
+			? '0'
+			: buttonTypography.mobile.fontSize[size]};
 		line-height: ${buttonTypography.mobile.lineHeight[size]};
-		padding-top: ${buttonPadding.mobile[size].vertical};
-		padding-bottom: ${buttonPadding.mobile[size].vertical};
-		padding-left: ${buttonPadding.mobile[size].horizontal};
-		padding-right: ${buttonPadding.mobile[size].horizontal};
 		border-radius: ${buttonBorderRadius.mobile[size]};
 		border-width: ${buttonBorderWidth.mobile};
 	`}
 
 	/* Tablet */
 	@media (min-width: ${props => props.theme.breakpoints.tablet}) {
-		${({ size = 'medium' }) => css`
-			min-width: ${buttonWidths.tablet[size]};
+		${({ size = 'medium', hasIcon, hasChildren }) => css`
+			min-width: ${hasIcon && !hasChildren
+				? buttonWidths.iconOnly.tablet[size]
+				: buttonWidths.tablet[size]};
 			min-height: ${buttonHeights.tablet[size]};
-			font-size: ${buttonTypography.tablet.fontSize[size]};
+			padding-top: ${hasIcon && !hasChildren
+				? buttonPadding.tablet.iconOnly.vertical
+				: buttonPadding.tablet[size].vertical};
+			padding-bottom: ${hasIcon && !hasChildren
+				? buttonPadding.tablet.iconOnly.vertical
+				: buttonPadding.tablet[size].vertical};
+			padding-left: ${hasIcon && !hasChildren
+				? buttonPadding.tablet.iconOnly.horizontal
+				: buttonPadding.tablet[size].horizontal};
+			padding-right: ${hasIcon && !hasChildren
+				? buttonPadding.tablet.iconOnly.horizontal
+				: buttonPadding.tablet[size].horizontal};
+			gap: ${hasIcon && hasChildren ? buttonGap.tablet[size] : '0'};
+			& > svg {
+				width: ${iconSizes.tablet[size]};
+				height: ${iconSizes.tablet[size]};
+			}
+			font-size: ${hasIcon && !hasChildren
+				? '0'
+				: buttonTypography.tablet.fontSize[size]};
 			line-height: ${buttonTypography.tablet.lineHeight[size]};
-			padding-top: ${buttonPadding.tablet[size].vertical};
-			padding-bottom: ${buttonPadding.tablet[size].vertical};
-			padding-left: ${buttonPadding.tablet[size].horizontal};
-			padding-right: ${buttonPadding.tablet[size].horizontal};
 			border-radius: ${buttonBorderRadius.tablet[size]};
 			border-width: ${buttonBorderWidth.tablet};
 		`}
@@ -65,15 +109,32 @@ const StyledButton = styled.button<StyledButtonProps>`
 
 	/* Desktop */
 	@media (min-width: ${props => props.theme.breakpoints.desktop}) {
-		${({ size = 'medium' }) => css`
-			min-width: ${buttonWidths.desktop[size]};
+		${({ size = 'medium', hasIcon, hasChildren }) => css`
+			min-width: ${hasIcon && !hasChildren
+				? buttonWidths.iconOnly.desktop[size]
+				: buttonWidths.desktop[size]};
 			min-height: ${buttonHeights.desktop[size]};
-			font-size: ${buttonTypography.desktop.fontSize[size]};
+			padding-top: ${hasIcon && !hasChildren
+				? buttonPadding.desktop.iconOnly.vertical
+				: buttonPadding.desktop[size].vertical};
+			padding-bottom: ${hasIcon && !hasChildren
+				? buttonPadding.desktop.iconOnly.vertical
+				: buttonPadding.desktop[size].vertical};
+			padding-left: ${hasIcon && !hasChildren
+				? buttonPadding.desktop.iconOnly.horizontal
+				: buttonPadding.desktop[size].horizontal};
+			padding-right: ${hasIcon && !hasChildren
+				? buttonPadding.desktop.iconOnly.horizontal
+				: buttonPadding.desktop[size].horizontal};
+			gap: ${hasIcon && hasChildren ? buttonGap.desktop[size] : '0'};
+			& > svg {
+				width: ${iconSizes.desktop[size]};
+				height: ${iconSizes.desktop[size]};
+			}
+			font-size: ${hasIcon && !hasChildren
+				? '0'
+				: buttonTypography.desktop.fontSize[size]};
 			line-height: ${buttonTypography.desktop.lineHeight[size]};
-			padding-top: ${buttonPadding.desktop[size].vertical};
-			padding-bottom: ${buttonPadding.desktop[size].vertical};
-			padding-left: ${buttonPadding.desktop[size].horizontal};
-			padding-right: ${buttonPadding.desktop[size].horizontal};
 			border-radius: ${buttonBorderRadius.desktop[size]};
 			border-width: ${buttonBorderWidth.desktop};
 		`}
@@ -293,22 +354,33 @@ const StyledButton = styled.button<StyledButtonProps>`
 `
 
 const Button: React.FC<ButtonProps> = ({
-	label,
+	children,
 	onClick,
 	variant = 'primary',
 	size = 'medium',
 	disabled = false,
+	icon,
+	iconPosition = 'left',
+	...props
 }) => {
-	const theme = useTheme()
+	const theme = useTheme() as Theme
+	const hasIcon = !!icon
+	const hasChildren = React.Children.count(children) > 0
+
 	return (
 		<StyledButton
 			theme={theme}
-			onClick={onClick}
 			variant={variant}
 			size={size}
 			disabled={disabled}
+			onClick={onClick}
+			hasIcon={hasIcon}
+			hasChildren={hasChildren}
+			{...props}
 		>
-			{label}
+			{hasIcon && iconPosition === 'left' && icon}
+			{hasChildren && <span>{children}</span>}
+			{hasIcon && iconPosition === 'right' && icon}
 		</StyledButton>
 	)
 }

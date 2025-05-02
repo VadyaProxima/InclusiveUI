@@ -43,6 +43,7 @@
     "@storybook/addon-actions": "^8.4.7",
     "@storybook/addon-controls": "^8.4.7",
     "@storybook/addon-knobs": "^8.0.1",
-    "@storybook/addon-links": "^8.4.7"
+    "@storybook/addon-links": "^8.4.7",
+    "react-feather": "^2.0.10"
   }
 }

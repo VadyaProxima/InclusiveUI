@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import { Meta, StoryFn } from '@storybook/react'
+import { Heart } from 'react-feather'
 import { darkTheme, lightTheme } from '../../theme'
 import Button, { ButtonProps } from './Button'
 
@@ -18,8 +19,15 @@ export default {
 		disabled: {
 			control: { type: 'boolean' },
 		},
-		label: {
+		children: {
 			control: { type: 'text' },
+		},
+		icon: {
+			control: { type: 'object' },
+		},
+		iconPosition: {
+			control: { type: 'radio' },
+			options: ['left', 'right'],
 		},
 	},
 } as Meta<ButtonProps>
@@ -80,7 +88,7 @@ const AllThemesTemplate: StoryFn<ButtonProps> = args => (
 
 export const Primary: StoryFn<ButtonProps> = Template.bind({})
 Primary.args = {
-	label: 'Primary Button',
+	children: 'Primary Button',
 	variant: 'primary',
 	size: 'medium',
 	disabled: false,
@@ -88,7 +96,7 @@ Primary.args = {
 
 export const Default: StoryFn<ButtonProps> = Template.bind({})
 Default.args = {
-	label: 'Default Button',
+	children: 'Default Button',
 	variant: 'default',
 	size: 'medium',
 	disabled: false,
@@ -96,7 +104,7 @@ Default.args = {
 
 export const Danger: StoryFn<ButtonProps> = Template.bind({})
 Danger.args = {
-	label: 'Danger Button',
+	children: 'Danger Button',
 	variant: 'danger',
 	size: 'medium',
 	disabled: false,
@@ -104,10 +112,39 @@ Danger.args = {
 
 export const Text: StoryFn<ButtonProps> = Template.bind({})
 Text.args = {
-	label: 'Text Button',
+	children: 'Text Button',
 	variant: 'text',
 	size: 'medium',
 	disabled: false,
+}
+
+export const WithIconLeft: StoryFn<ButtonProps> = Template.bind({})
+WithIconLeft.args = {
+	children: 'Icon Left',
+	variant: 'primary',
+	size: 'medium',
+	disabled: false,
+	icon: <Heart />,
+	iconPosition: 'left',
+}
+
+export const WithIconRight: StoryFn<ButtonProps> = Template.bind({})
+WithIconRight.args = {
+	children: 'Icon Right',
+	variant: 'default',
+	size: 'medium',
+	disabled: false,
+	icon: <Heart />,
+	iconPosition: 'right',
+}
+
+export const IconOnly: StoryFn<ButtonProps> = Template.bind({})
+IconOnly.args = {
+	variant: 'primary',
+	size: 'medium',
+	disabled: false,
+	icon: <Heart />,
+	'aria-label': 'Heart',
 }
 
 export const PrimaryStates: StoryFn<ButtonProps> = args => (
@@ -131,12 +168,12 @@ export const PrimaryStates: StoryFn<ButtonProps> = args => (
 	</ThemeProvider>
 )
 PrimaryStates.args = {
-	label: 'Primary Button',
+	children: 'Primary Button',
 	size: 'medium',
 }
 
 export const AllThemes: StoryFn<ButtonProps> = AllThemesTemplate.bind({})
 AllThemes.args = {
-	label: 'Button',
+	children: 'Button',
 	size: 'medium',
 }

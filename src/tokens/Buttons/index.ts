@@ -75,8 +75,8 @@ export const buttonWidths = {
 export const buttonGap = {
 	desktop: {
 		large: '16px',
-		medium: '12px',
-		small: '8px',
+		medium: '8px',
+		small: '4px',
 	},
 	tablet: {
 		large: '12px',
@@ -117,16 +117,29 @@ export const iconSizes = {
 	tablet: {
 		large: '28px',
 		medium: '20px',
-		small: '12px',
+		small: '14px',
 	},
 	mobile: {
 		large: '24px',
 		medium: '16px',
-		small: '8px',
+		small: '12px',
 	},
 }
 
-export const buttonPadding = {
+type ButtonSize = 'small' | 'medium' | 'large'
+type ScreenSize = 'desktop' | 'tablet' | 'mobile'
+
+type PaddingValue = { vertical: string; horizontal: string }
+
+type ButtonPaddingType = {
+	[screen in ScreenSize]: {
+		[size in ButtonSize]: PaddingValue
+	} & {
+		iconOnly: PaddingValue
+	}
+}
+
+export const buttonPadding: ButtonPaddingType = {
 	desktop: {
 		large: { vertical: '16px', horizontal: '20px' },
 		medium: { vertical: '14px', horizontal: '12px' },
