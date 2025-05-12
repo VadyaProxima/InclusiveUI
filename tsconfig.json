@@ -1,16 +1,18 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "target": "es5",
-    "module": "esnext",
-    "declaration": true,
-    "declarationMap": true,
-    "outDir": "./dist",
-    "jsx": "react-jsx",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "moduleResolution": "node"
-  },
-  "exclude": ["node_modules", "dist", "example"]
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"target": "es5",
+		"module": "esnext",
+		"declaration": true,
+		"declarationMap": true,
+		"outDir": "./dist",
+		"jsx": "react-jsx",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"moduleResolution": "node",
+		"types": ["@storybook/react"]
+	},
+	"exclude": ["node_modules", "dist", "example"],
+	"include": ["src", ".storybook/**/*"]
 }
