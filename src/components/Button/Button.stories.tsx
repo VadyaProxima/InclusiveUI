@@ -29,6 +29,42 @@ export default {
 			control: { type: 'radio' },
 			options: ['left', 'right'],
 		},
+		'aria-label': {
+			control: { type: 'text' },
+			description: 'Обязательный accessibility label',
+			table: {
+				type: { summary: 'string' },
+			},
+		},
+		'aria-describedby': {
+			control: { type: 'text' },
+			description: 'ID элемента, описывающего кнопку',
+			table: {
+				type: { summary: 'string | undefined' },
+			},
+		},
+		'aria-haspopup': {
+			control: { type: 'select' },
+			options: [false, true, 'menu', 'listbox', 'tree', 'grid', 'dialog'],
+			description: 'Указывает, вызывает ли кнопка всплывающий элемент',
+			table: {
+				type: { summary: "boolean | 'menu' | 'listbox' | ... | undefined" },
+			},
+		},
+		'aria-expanded': {
+			control: { type: 'boolean' },
+			description: 'Указывает, развернут ли контролируемый элемент',
+			table: {
+				type: { summary: 'boolean | undefined' },
+			},
+		},
+		'aria-controls': {
+			control: { type: 'text' },
+			description: 'ID контролируемого элемента',
+			table: {
+				type: { summary: 'string | undefined' },
+			},
+		},
 	},
 } as Meta<ButtonProps>
 
@@ -92,6 +128,7 @@ Primary.args = {
 	variant: 'primary',
 	size: 'medium',
 	disabled: false,
+	'aria-label': 'Primary Button Action',
 }
 
 export const Default: StoryFn<ButtonProps> = Template.bind({})
@@ -100,6 +137,16 @@ Default.args = {
 	variant: 'default',
 	size: 'medium',
 	disabled: false,
+	'aria-label': 'Default Button Action',
+}
+
+export const IconOnly: StoryFn<ButtonProps> = Template.bind({})
+IconOnly.args = {
+	variant: 'primary',
+	size: 'medium',
+	disabled: false,
+	icon: <Heart />,
+	'aria-label': 'Like Action',
 }
 
 export const Danger: StoryFn<ButtonProps> = Template.bind({})
@@ -108,6 +155,7 @@ Danger.args = {
 	variant: 'danger',
 	size: 'medium',
 	disabled: false,
+	'aria-label': 'Danger Button Action',
 }
 
 export const Text: StoryFn<ButtonProps> = Template.bind({})
@@ -116,6 +164,7 @@ Text.args = {
 	variant: 'text',
 	size: 'medium',
 	disabled: false,
+	'aria-label': 'Text Button Action',
 }
 
 export const WithIconLeft: StoryFn<ButtonProps> = Template.bind({})
@@ -126,6 +175,7 @@ WithIconLeft.args = {
 	disabled: false,
 	icon: <Heart />,
 	iconPosition: 'left',
+	'aria-label': 'Icon Left Action',
 }
 
 export const WithIconRight: StoryFn<ButtonProps> = Template.bind({})
@@ -136,15 +186,7 @@ WithIconRight.args = {
 	disabled: false,
 	icon: <Heart />,
 	iconPosition: 'right',
-}
-
-export const IconOnly: StoryFn<ButtonProps> = Template.bind({})
-IconOnly.args = {
-	variant: 'primary',
-	size: 'medium',
-	disabled: false,
-	icon: <Heart />,
-	'aria-label': 'Heart',
+	'aria-label': 'Icon Right Action',
 }
 
 export const PrimaryStates: StoryFn<ButtonProps> = args => (
@@ -170,10 +212,12 @@ export const PrimaryStates: StoryFn<ButtonProps> = args => (
 PrimaryStates.args = {
 	children: 'Primary Button',
 	size: 'medium',
+	'aria-label': 'Primary Button Action Example',
 }
 
 export const AllThemes: StoryFn<ButtonProps> = AllThemesTemplate.bind({})
 AllThemes.args = {
 	children: 'Button',
 	size: 'medium',
+	'aria-label': 'Sample Button',
 }

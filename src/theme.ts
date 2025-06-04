@@ -1,5 +1,5 @@
 import { colors } from './tokens/colors'
-import { textColors } from './tokens/typography'
+import { textColors } from './tokens/Typography'
 
 // Helper для создания цветов disabled (можно вынести в utils, если нужно)
 // Применяет 40% прозрачности к HEX цвету

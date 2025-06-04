@@ -14,7 +14,7 @@ import {
 	fontSizes,
 	fontWeights,
 	lineHeights,
-} from '../../tokens/typography'
+} from '../../tokens/Typography'
 
 // Определяем типы пропсов
 interface CheckboxProps {

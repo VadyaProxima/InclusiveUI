@@ -1,54 +1,56 @@
 {
-  "name": "unifyui",
-  "version": "1.0.0",
-  "description": "",
-  "main": "./dist/index.cjs.js",
-  "module": "./dist/index.esm.js",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "rollup -c",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
-  },
-  "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0"
-  },
-  "devDependencies": {
-    "@babel/preset-env": "^7.27.2",
-    "@babel/preset-react": "^7.27.1",
-    "@babel/preset-typescript": "^7.27.1",
-    "@chromatic-com/storybook": "^3.2.3",
-    "@emotion/babel-plugin": "^11.13.5",
-    "@rollup/plugin-commonjs": "^28.0.2",
-    "@rollup/plugin-node-resolve": "^16.0.0",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@storybook/addon-essentials": "^8.4.7",
-    "@storybook/addon-interactions": "^8.4.7",
-    "@storybook/addon-onboarding": "^8.4.7",
-    "@storybook/blocks": "^8.4.7",
-    "@storybook/react": "^8.4.7",
-    "@storybook/react-vite": "^8.4.7",
-    "@storybook/test": "^8.4.7",
-    "@storybook/types": "^8.6.12",
-    "@types/react": "^19.0.2",
-    "@types/rollup-plugin-peer-deps-external": "^2.2.5",
-    "rollup": "^4.29.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-typescript2": "^0.36.0",
-    "storybook": "^8.4.7",
-    "typescript": "^5.7.2"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@storybook/addon-a11y": "^8.4.7",
-    "@storybook/addon-actions": "^8.4.7",
-    "@storybook/addon-controls": "^8.4.7",
-    "@storybook/addon-knobs": "^8.0.1",
-    "@storybook/addon-links": "^8.4.7",
-    "react-feather": "^2.0.10"
-  }
+	"name": "inclusive-ui",
+	"version": "1.0.0",
+	"description": "",
+	"main": "./dist/index.cjs.js",
+	"module": "./dist/index.esm.js",
+	"files": [
+		"dist"
+	],
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"build": "rollup -c",
+		"prepublishOnly": "npm run build",
+		"storybook": "storybook dev -p 6006",
+		"build-storybook": "storybook build"
+	},
+	"peerDependencies": {
+		"react": "^17.0.0 || ^18.0.0",
+		"react-dom": "^17.0.0 || ^18.0.0",
+		"@emotion/react": "^11.0.0",
+		"@emotion/styled": "^11.0.0"
+	},
+	"devDependencies": {
+		"@babel/preset-env": "^7.27.2",
+		"@babel/preset-react": "^7.27.1",
+		"@babel/preset-typescript": "^7.27.1",
+		"@chromatic-com/storybook": "^3.2.3",
+		"@emotion/babel-plugin": "^11.13.5",
+		"@rollup/plugin-commonjs": "^28.0.2",
+		"@rollup/plugin-node-resolve": "^16.0.0",
+		"@rollup/plugin-terser": "^0.4.4",
+		"@storybook/addon-essentials": "^8.4.7",
+		"@storybook/addon-interactions": "^8.4.7",
+		"@storybook/addon-onboarding": "^8.4.7",
+		"@storybook/blocks": "^8.4.7",
+		"@storybook/react": "^8.4.7",
+		"@storybook/react-vite": "^8.4.7",
+		"@storybook/test": "^8.4.7",
+		"@storybook/types": "^8.6.12",
+		"@types/react": "^19.0.2",
+		"@types/rollup-plugin-peer-deps-external": "^2.2.5",
+		"react-feather": "^2.0.10",
+		"rollup": "^4.29.1",
+		"rollup-plugin-peer-deps-external": "^2.2.4",
+		"rollup-plugin-typescript2": "^0.36.0",
+		"storybook": "^8.4.7",
+		"typescript": "^5.7.2"
+	},
+	"dependencies": {
+		"@storybook/addon-a11y": "^8.4.7",
+		"@storybook/addon-actions": "^8.4.7",
+		"@storybook/addon-controls": "^8.4.7",
+		"@storybook/addon-knobs": "^8.0.1",
+		"@storybook/addon-links": "^8.4.7"
+	}
 }
