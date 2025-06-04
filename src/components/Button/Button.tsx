@@ -22,6 +22,19 @@ export interface ButtonProps
 	disabled?: boolean
 	icon?: React.ReactNode
 	iconPosition?: 'left' | 'right'
+	'aria-label': string
+	'aria-describedby'?: string
+	'aria-haspopup'?:
+		| boolean
+		| 'false'
+		| 'true'
+		| 'menu'
+		| 'listbox'
+		| 'tree'
+		| 'grid'
+		| 'dialog'
+	'aria-expanded'?: boolean | 'false' | 'true'
+	'aria-controls'?: string
 }
 
 // Добавляем тип для пропсов StyledButton, включая theme и новые пропсы
@@ -30,6 +43,7 @@ interface StyledButtonProps extends Omit<ButtonProps, 'children' | 'label'> {
 	hasIcon?: boolean
 	hasChildren?: boolean
 }
+
 
 // Styled-component для кнопки с использованием динамических стилей
 const StyledButton = styled.button<StyledButtonProps>`
@@ -43,7 +57,6 @@ const StyledButton = styled.button<StyledButtonProps>`
 	box-shadow: none;
 	outline: none;
 
-	/* Define base styles first */
 	${({ size = 'medium', hasIcon, hasChildren }) => css`
 		min-width: ${hasIcon && !hasChildren
 			? buttonWidths.iconOnly.mobile[size]
@@ -108,6 +121,7 @@ const StyledButton = styled.button<StyledButtonProps>`
 	}
 
 	/* Desktop */
+	/* Desktop */
 	@media (min-width: ${props => props.theme.breakpoints.desktop}) {
 		${({ size = 'medium', hasIcon, hasChildren }) => css`
 			min-width: ${hasIcon && !hasChildren
@@ -140,7 +154,6 @@ const StyledButton = styled.button<StyledButtonProps>`
 		`}
 	}
 
-	/* Применяем стили варианта из темы */
 	${({ theme, variant = 'primary' }) => {
 		const variantColors = theme.colors.button[variant]
 		let baseStyles = css``
@@ -149,7 +162,6 @@ const StyledButton = styled.button<StyledButtonProps>`
 		let focusStyles = css``
 		let disabledStyles = css``
 
-		// Базовые стили для disabled
 		disabledStyles = css`
 			background-color: ${variantColors.disabledBackground};
 			color: ${variantColors.disabledText};
@@ -158,7 +170,6 @@ const StyledButton = styled.button<StyledButtonProps>`
 			cursor: not-allowed;
 		`
 
-		// Стили в зависимости от варианта
 		if (variant === 'primary') {
 			if (
 				'defaultShadow' in variantColors &&
@@ -361,7 +372,13 @@ const Button: React.FC<ButtonProps> = ({
 	disabled = false,
 	icon,
 	iconPosition = 'left',
-	...props
+	// Явно извлекаем aria-* пропсы, чтобы передать их дальше
+	'aria-label': ariaLabel,
+	'aria-describedby': ariaDescribedBy,
+	'aria-haspopup': ariaHasPopup,
+	'aria-expanded': ariaExpanded,
+	'aria-controls': ariaControls,
+	...props // Остальные пропсы, включая стандартные HTML атрибуты
 }) => {
 	const theme = useTheme() as Theme
 	const hasIcon = !!icon
@@ -376,6 +393,11 @@ const Button: React.FC<ButtonProps> = ({
 			onClick={onClick}
 			hasIcon={hasIcon}
 			hasChildren={hasChildren}
+			aria-label={ariaLabel}
+			aria-describedby={ariaDescribedBy}
+			aria-haspopup={ariaHasPopup}
+			aria-expanded={ariaExpanded}
+			aria-controls={ariaControls}
 			{...props}
 		>
 			{hasIcon && iconPosition === 'left' && icon}

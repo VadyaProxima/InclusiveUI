@@ -7,7 +7,7 @@ import {
 	fontSizes,
 	fontWeights,
 	lineHeights,
-} from '../../tokens/typography'
+} from '../../tokens/Typography'
 
 // 1. Определяем новый, четкий набор вариантов
 export type TypographyVariant = keyof typeof typographyStyles

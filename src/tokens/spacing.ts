@@ -1,8 +1,8 @@
 import { colors } from './colors'
 
 export const borderColors = {
-	main: colors.gray[1000],
-	secondary: colors.gray[600],
+	main: colors.light.gray[1000],
+	secondary: colors.light.gray[600],
 }
 
 export const borderStyles = {
@@ -32,25 +32,34 @@ export const borderWidths = {
 
 export const borderRadius = {
 	desktop: {
+		full: '999px',
+		large: '16px',
+		medium: '8px',
 		small: '6px',
-		medium: '12px',
-		large: '18px',
+		tiny: '4px',
+		none: '0px',
 	},
 	tablet: {
-		small: '6px',
-		medium: '10px',
-		large: '16px',
+		full: '999px',
+		large: '12px',
+		medium: '6px',
+		small: '4px',
+		tiny: '3px',
+		none: '0px',
 	},
 	mobile: {
-		small: '6px',
-		medium: '8px',
-		large: '14px',
+		full: '999px',
+		large: '8px',
+		medium: '4px',
+		small: '4px',
+		tiny: '2px',
+		none: '0px',
 	},
 }
 
 export const outlineColors = {
-	main: colors.gray[1000],
-	secondary: colors.gray[600],
+	main: colors.light.gray[1000],
+	secondary: colors.light.gray[600],
 }
 
 export const outlineStyles = {
@@ -137,37 +146,76 @@ export const layout = {
 
 export const margin = {
 	desktop: {
-		small: '12px',
-		medium: '24px',
-		large: '40px',
+		huge: '32',
+		large: '24',
+		medium: '16',
+		small: '8',
+		tiny: '4',
 	},
 	tablet: {
-		small: '10px',
-		medium: '20px',
-		large: '32px',
+		huge: '24',
+		large: '20',
+		medium: '12',
+		small: '7',
+		tiny: '3',
 	},
 	mobile: {
-		small: '8px',
-		medium: '16px',
-		large: '24px',
+		huge: '20',
+		large: '16',
+		medium: '8',
+		small: '6',
+		tiny: '2',
 	},
 }
 
 export const padding = {
 	desktop: {
-		small: '12px',
-		medium: '24px',
-		large: '40px',
+		horizontal: {
+			huge: '32',
+			large: '24',
+			medium: '16',
+			small: '8',
+			tiny: '4',
+		},
+		vertical: {
+			huge: '32',
+			large: '24',
+			medium: '16',
+			small: '8',
+			tiny: '4',
+		},
 	},
 	tablet: {
-		small: '10px',
-		medium: '20px',
-		large: '32px',
+		horizontal: {
+			huge: '24',
+			large: '20',
+			medium: '12',
+			small: '8',
+			tiny: '3',
+		},
+		vertical: {
+			huge: '24',
+			large: '20',
+			medium: '12',
+			small: '8',
+			tiny: '3',
+		},
 	},
 	mobile: {
-		small: '8px',
-		medium: '16px',
-		large: '24px',
+		horizontal: {
+			huge: '20',
+			large: '16',
+			medium: '8',
+			small: '6',
+			tiny: '2',
+		},
+		vertical: {
+			huge: '20',
+			large: '16',
+			medium: '8',
+			small: '6',
+			tiny: '2',
+		},
 	},
 }
 
@@ -175,4 +223,79 @@ export const opacity = {
 	high: '0.8',
 	medium: '0.5',
 	low: '0.2',
+}
+
+export const screenSize = {
+	desktop: {
+		landscapeWidth: '1920',
+		landscapeHeight: '1080',
+		portraitWidth: '1440',
+		portraitHeight: '1920',
+	},
+	tablet: {
+		landscapeWidth: '1024',
+		landscapeHeight: '768',
+		portraitWidth: '768',
+		portraitHeight: '1024',
+	},
+	mobile: {
+		landscapeWidth: '812',
+		landscapeHeight: '375',
+		portraitWidth: '375',
+		portraitHeight: '812',
+	},
+}
+
+export const size = {
+	desktop: {
+		huge: '48',
+		extraLarge: '32',
+		large: '24',
+		medium: '20',
+		default: '16',
+		mediumSmall: '12',
+		small: '8',
+		tiny: '4',
+	},
+	tablet: {
+		huge: '44',
+		extraLarge: '28',
+		large: '24',
+		medium: '18',
+		default: '14',
+		mediumSmall: '10',
+		small: '8',
+		tiny: '4',
+	},
+	mobile: {
+		huge: '44',
+		extraLarge: '28',
+		large: '24',
+		medium: '16',
+		default: '12',
+		mediumSmall: '8',
+		small: '6',
+		tiny: '4',
+	},
+}
+
+export const height = {
+	desktop: {
+		huge: '64',
+		large: '56',
+		medium: '48',
+		small: '44',
+	},
+	tablet: {
+		huge: '56',
+		large: '48',
+		medium: '46',
+		small: '44',
+	},
+	mobile: {
+		huge: '48',
+		large: '46',
+		medium: '44',
+		small: '44',
+	},
 }

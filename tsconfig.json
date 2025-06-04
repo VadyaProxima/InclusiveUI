@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
-		"target": "es5",
-		"module": "esnext",
+		"target": "ES2015",
+		"module": "ESNext",
 		"declaration": true,
 		"declarationMap": true,
 		"outDir": "./dist",
@@ -11,8 +11,23 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"moduleResolution": "node",
-		"types": ["@storybook/react"]
+		"types": ["@storybook/react"],
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"isolatedModules": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitAny": true,
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"emitDeclarationOnly": false,
+		"sourceMap": true
 	},
-	"exclude": ["node_modules", "dist", "example"],
-	"include": ["src", ".storybook/**/*"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"storybook-static",
+		"**/*.stories.tsx",
+		"**/*.test.tsx"
+	],
+	"include": ["src/**/*"]
 }

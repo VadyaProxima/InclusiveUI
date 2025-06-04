@@ -2,6 +2,7 @@ import { css, useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import React from 'react'
 import { Theme } from '../../theme'
+import { colors } from '../../tokens/colors'
 import {
 	radioButtonBorderRadius,
 	radioButtonBorderWidth,
@@ -9,13 +10,12 @@ import {
 	radioButtonInnerCircleSize,
 	radioButtonSize,
 } from '../../tokens/RadioButton'
-import { colors } from '../../tokens/colors'
 import {
 	fontFamily,
 	fontSizes,
 	fontWeights,
 	lineHeights,
-} from '../../tokens/typography'
+} from '../../tokens/Typography'
 
 // Определяем типы пропсов
 interface RadioButtonProps {
@@ -54,10 +54,10 @@ const StyledRadioButton = styled.input<{
 	appearance: none;
 	-webkit-appearance: none;
 	margin: 0;
-	width: ${p => getDeviceValue(radioButtonSize, p.device)};
-	height: ${p => getDeviceValue(radioButtonSize, p.device)};
-	border-radius: ${p => getDeviceValue(radioButtonBorderRadius, p.device)};
-	border-width: ${p => getDeviceValue(radioButtonBorderWidth, p.device)};
+	width: ${radioButtonSize};
+	height: ${radioButtonSize};
+	border-radius: ${radioButtonBorderRadius};
+	border-width: ${radioButtonBorderWidth};
 	border-style: solid;
 	outline: none;
 	flex-shrink: 0;
@@ -71,14 +71,14 @@ const StyledRadioButton = styled.input<{
 		position: absolute;
 		left: 50%;
 		top: 50%;
-		width: ${p => getDeviceValue(radioButtonInnerCircleSize, p.device)};
-		height: ${p => getDeviceValue(radioButtonInnerCircleSize, p.device)};
+		width: ${radioButtonInnerCircleSize};
+		height: ${radioButtonInnerCircleSize};
 		background-color: currentColor;
 		border-radius: 50%;
 		transform: translate(-50%, -50%);
 	}
 
-	${({ theme, checked, disabled, device }) => {
+	${({ theme, checked, disabled }) => {
 		// Базовые стили
 		const baseStyles = css`
 			background-color: ${colors.light.neutral.white};
@@ -111,8 +111,7 @@ const StyledRadioButton = styled.input<{
 					? colors.light.gray[200]
 					: colors.light.blue[700]};
 				color: ${disabled ? colors.light.gray[200] : colors.light.blue[700]};
-				box-shadow: 0 0 0
-					${getDeviceValue(radioButtonFocusShadowSpread, device)}
+				box-shadow: 0 0 0 ${radioButtonFocusShadowSpread}
 					rgba(0, 143, 243, 0.25);
 			}
 		`
