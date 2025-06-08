@@ -44,7 +44,6 @@ interface StyledButtonProps extends Omit<ButtonProps, 'children' | 'label'> {
 	hasChildren?: boolean
 }
 
-
 // Styled-component для кнопки с использованием динамических стилей
 const StyledButton = styled.button<StyledButtonProps>`
 	display: inline-flex;
