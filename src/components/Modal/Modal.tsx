@@ -1,4 +1,3 @@
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { ReactNode, useEffect } from 'react'
 import { colors } from '../../tokens/colors'
@@ -25,7 +24,6 @@ const CloseIconSvg: React.FC<{ color: string }> = ({ color }) => (
 )
 
 // --- Types ---
-type Device = 'desctop' | 'tablet' | 'mobile' // Matches token keys
 export type ModalVariant = 'info' | 'success' | 'warning' | 'error' | 'default'
 
 export interface ModalProps {
@@ -34,10 +32,8 @@ export interface ModalProps {
 	title?: string
 	children: ReactNode
 	footerContent?: ReactNode
-	device?: Device
 	hideCloseButton?: boolean
 	variant?: ModalVariant
-	statusIcon?: ReactNode
 	statusTitle?: string
 	statusContent?: string
 	// Default buttons
@@ -69,7 +65,7 @@ const ModalOverlay = styled.div`
 	z-index: 1000; // Ensure it's on top
 `
 
-const ModalContainer = styled.div<{ device: Device }>`
+const ModalContainer = styled.div`
 	background-color: ${colors.light.neutral.white};
 	border-radius: ${borderRadius.desktop.small}; // 6px from Figma
 	box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.25),
@@ -79,11 +75,18 @@ const ModalContainer = styled.div<{ device: Device }>`
 	overflow: hidden;
 	padding: 16px; // Общие внутренние отступы для модалки
 
-	${({ device }) => css`
-		width: ${modalWidth[device] || modalWidth.desctop};
-		min-height: ${modalHeight[device] || modalHeight.desctop};
-		// Если modalWidth/Height должны учитывать padding, то нужно будет их вычитать или использовать box-sizing: border-box на всех уровнях
-	`}
+	width: ${modalWidth.mobile};
+	min-height: ${modalHeight.mobile};
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+		width: ${modalWidth.tablet};
+		min-height: ${modalHeight.tablet};
+	}
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+		width: ${modalWidth.desctop};
+		min-height: ${modalHeight.desctop};
+	}
 `
 
 const ModalHeader = styled.header`
@@ -142,9 +145,10 @@ const StatusContentWrapper = styled.div`
 	flex-direction: column;
 `
 
-const ModalBody = styled.section`
+const ModalBody = styled.section<{ variant: ModalVariant }>`
 	overflow-y: auto;
 	flex-grow: 1;
+	padding-top: ${({ variant }) => (variant !== 'default' ? '22px' : '0')};
 	// padding для ModalBody теперь не нужен, т.к. ModalContainer имеет общий padding 16px.
 	// Если нужен дополнительный отступ *внутри* body, его можно добавить здесь.
 	// Если есть statusTitle или statusContent, они будут с отступами благодаря StatusWrapper
@@ -179,10 +183,8 @@ const Modal: React.FC<ModalProps> = ({
 	title,
 	children,
 	footerContent,
-	device = 'desctop',
 	hideCloseButton = false,
 	variant = 'default',
-	statusIcon,
 	statusTitle,
 	statusContent,
 	showCancelButton = true,
@@ -261,79 +263,62 @@ const Modal: React.FC<ModalProps> = ({
 			case 'info':
 				return colors.light.blue[600]
 			case 'success':
-				return colors.light.green[500]
+				return colors.light.green[600]
 			case 'warning':
-				return colors.light.gold[500]
+				return colors.light.gold[300]
 			case 'error':
 				return colors.light.red[600]
 			default:
-				return ''
+				return 'transparent'
 		}
 	}
 
 	const renderStatusIcon = () => {
-		if (variant === 'default' && !statusIcon) return null
-		if (statusIcon) return <StatusIconWrapper>{statusIcon}</StatusIconWrapper>
-
-		const color = getVariantColor()
-		if (!color) return null
-
+		if (variant === 'default') {
+			return null
+		}
 		return (
 			<StatusIconWrapper>
-				<StatusCircle variantColor={color} />
+				<StatusCircle variantColor={getVariantColor()} />
 			</StatusIconWrapper>
 		)
 	}
 
+	const hasStatusContent = statusTitle || statusContent
+
 	return (
-		<ModalOverlay
-			onClick={handleOverlayClick}
-			role="dialog"
-			aria-modal="true"
-			aria-labelledby={ariaLabelledby}
-			aria-describedby={ariaDescribedby}
-			className={className}
-		>
-			<ModalContainer device={device}>
+		<ModalOverlay onClick={handleOverlayClick}>
+			<ModalContainer className={className}>
 				{(title || !hideCloseButton) && (
 					<ModalHeader>
 						{title && (
-							<ModalTitle variant="bodyLargeBold" color="gray1000">
+							<ModalTitle variant="bodyLargeBold" as="h2">
 								{title}
 							</ModalTitle>
 						)}
 						{!hideCloseButton && (
 							<CloseButton onClick={onClose} aria-label="Close modal">
-								<CloseIconSvg color={colors.light.gray[800]} />
+								<CloseIconSvg color={colors.light.gray[500]} />
 							</CloseButton>
 						)}
 					</ModalHeader>
 				)}
-				<ModalBody id={ariaDescribedby}>
-					{(variant !== 'default' ||
-						statusIcon ||
-						statusTitle ||
-						statusContent) &&
-						(statusTitle || statusContent || statusIcon) && (
-							<StatusVariantWrapper>
-								{renderStatusIcon()}
-								{(statusTitle || statusContent) && (
-									<StatusContentWrapper>
-										{statusTitle && (
-											<Typography variant="heading5" color="gray1000">
-												{statusTitle}
-											</Typography>
-										)}
-										{statusContent && (
-											<Typography variant="bodyLarge" color="gray800">
-												{statusContent}
-											</Typography>
-										)}
-									</StatusContentWrapper>
+				<ModalBody variant={variant}>
+					{hasStatusContent ? (
+						<StatusVariantWrapper>
+							{renderStatusIcon()}
+							<StatusContentWrapper>
+								{statusTitle && (
+									<Typography variant="heading6">{statusTitle}</Typography>
 								)}
-							</StatusVariantWrapper>
-						)}
-					{children}
+								{statusContent && (
+									<Typography variant="paragraph">{statusContent}</Typography>
+								)}
+							</StatusContentWrapper>
+						</StatusVariantWrapper>
+					) : (
+						children
+					)}
 				</ModalBody>
 				{(footerContent || showCancelButton || showConfirmButton) && (
 					<ModalFooter>

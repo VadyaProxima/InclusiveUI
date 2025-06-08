@@ -20,7 +20,6 @@ const meta = {
 	argTypes: {
 		isOpen: { control: 'boolean' },
 		title: { control: 'text' },
-		device: { control: 'radio', options: ['desctop', 'tablet', 'mobile'] },
 		hideCloseButton: { control: 'boolean' },
 		showCancelButton: { control: 'boolean' },
 		cancelButtonText: { control: 'text' },
@@ -40,10 +39,9 @@ type Story = StoryObj<typeof meta>
 const ModalTemplate: Story = {
 	args: {
 		isOpen: false,
-		onClose: () => console.log('Template onClose triggered'), // Default for template
-		children: <Typography variant="paragraph">Дети из шаблона</Typography>, // Default children for template
-		title: 'Заголовок из шаблона', // Default title
-		// Можно добавить другие обязательные или часто используемые пропсы с дефолтными значениями
+		onClose: () => console.log('Template onClose triggered'),
+		children: <Typography variant="paragraph">Дети из шаблона</Typography>,
+		title: 'Заголовок из шаблона',
 	},
 	render: args => {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -52,7 +50,6 @@ const ModalTemplate: Story = {
 		const handleOpen = () => setIsOpen(true)
 		const handleClose = () => {
 			setIsOpen(false)
-			// Call onClose from args if provided, to ensure Storybook action is logged
 			args.onClose?.()
 		}
 
@@ -62,18 +59,7 @@ const ModalTemplate: Story = {
 					Открыть модальное окно
 				</Button>
 				<Modal {...args} isOpen={isOpen} onClose={handleClose}>
-					{args.children || (
-						<Typography variant="paragraph">
-							Это содержимое модального окна. Здесь может быть любой
-							React-компонент или текст. Можно добавить больше контента, чтобы
-							проверить прокрутку.
-							<br /> <br />
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-							eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-							enim ad minim veniam, quis nostrud exercitation ullamco laboris
-							nisi ut aliquip ex ea commodo consequat.
-						</Typography>
-					)}
+					{args.children}
 				</Modal>
 			</>
 		)
@@ -82,112 +68,65 @@ const ModalTemplate: Story = {
 
 // --- Stories ---
 
-export const Default: Story = {
+export const Basic: Story = {
 	...ModalTemplate,
 	args: {
-		...ModalTemplate.args, // Наследуем args из шаблона
-		isOpen: false, // Переопределяем или подтверждаем
-		title: 'Заголовок модального окна',
-		device: 'desctop',
-		children: (
-			<Typography variant="paragraph">
-				Это основное содержимое модального окна для демонстрации.
-			</Typography>
-		),
-		onClose: () => console.log('Default Modal closed'),
-		onConfirm: () => console.log('Default Confirmed!'),
-		onCancel: () => console.log('Default Cancelled!'),
+		...ModalTemplate.args,
+		isOpen: true,
+		title: 'Modal Basic',
+		children: <Typography variant="paragraph">This is a text</Typography>,
+		showCancelButton: false,
+		onClose: () => console.log('Basic Modal closed'),
+		onConfirm: () => console.log('Basic Confirmed!'),
+		onCancel: () => console.log('Basic Cancelled!'),
 	},
 }
 
-export const Mobile: Story = {
+export const BasicWithCancel: Story = {
 	...ModalTemplate,
 	args: {
-		...Default.args,
-		device: 'mobile',
-		title: 'Мобильное окно',
+		...Basic.args,
+		showCancelButton: true,
 	},
 }
 
-export const Tablet: Story = {
+export const Info: Story = {
 	...ModalTemplate,
 	args: {
-		...Default.args,
-		device: 'tablet',
-		title: 'Планшетное окно',
-	},
-}
-
-export const WithoutTitle: Story = {
-	...ModalTemplate,
-	args: {
-		...Default.args,
-		title: undefined,
-	},
-}
-
-export const WithoutCloseButton: Story = {
-	...ModalTemplate,
-	args: {
-		...Default.args,
+		...Basic.args,
+		variant: 'info',
+		title: '',
 		hideCloseButton: true,
-	},
-}
-
-export const CustomFooter: Story = {
-	...ModalTemplate,
-	args: {
-		...Default.args, // Наследуем Default args, который уже содержит все необходимое
-		title: 'Окно с кастомным футером',
-		footerContent: (
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					width: '100%',
-				}}
-			>
-				<Button aria-label="Доп. действие" variant="text">
-					Доп. действие
-				</Button>
-				<Button
-					aria-label="Удалить"
-					variant="danger"
-					onClick={() => console.log('Deleted')}
-				>
-					Удалить
-				</Button>
-			</div>
-		),
-		// Hide default buttons when custom footer is provided
 		showCancelButton: false,
-		showConfirmButton: false,
+		statusTitle: 'This is some info',
+		statusContent: 'Some contents...',
+		confirmButtonText: 'OK',
 	},
 }
 
-export const OnlyConfirmButton: Story = {
+export const Success: Story = {
 	...ModalTemplate,
 	args: {
-		...Default.args,
-		title: 'Только подтверждение',
-		showCancelButton: false,
+		...Info.args,
+		variant: 'success',
+		statusTitle: 'Some task has completed!',
 	},
 }
 
-export const LongContent: Story = {
+export const Warning: Story = {
 	...ModalTemplate,
 	args: {
-		...Default.args,
-		title: 'Окно с длинным контентом',
-		children: (
-			<Typography variant="paragraph">
-				{[...Array(20)].map((_, i) => (
-					<React.Fragment key={i}>
-						Это строка номер {i + 1} для проверки прокрутки в модальном окне.{' '}
-						<br />
-					</React.Fragment>
-				))}
-			</Typography>
-		),
+		...Info.args,
+		variant: 'warning',
+		statusTitle: 'This is a warning message',
+	},
+}
+
+export const Danger: Story = {
+	...ModalTemplate,
+	args: {
+		...Info.args,
+		variant: 'error',
+		statusTitle: 'This is an error message',
 	},
 }
