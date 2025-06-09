@@ -1,38 +1,40 @@
+import { fontSizes, lineHeights } from '../Typography'
+
 export const buttonTypography = {
 	desktop: {
 		fontSize: {
-			small: '1.25rem',
-			medium: '1.5rem',
-			large: '1.75rem',
+			small: fontSizes.desktop.label,
+			medium: fontSizes.desktop.paragraph,
+			large: fontSizes.desktop.bodyM,
 		},
 		lineHeight: {
-			small: '16px',
-			medium: '24px',
-			large: '28px',
+			small: lineHeights.desktop.label,
+			medium: lineHeights.desktop.paragraph,
+			large: lineHeights.desktop.bodyM,
 		},
 	},
 	tablet: {
 		fontSize: {
-			small: '0.75rem',
-			medium: '0.875rem',
-			large: '1.125rem',
+			small: fontSizes.tablet.label,
+			medium: fontSizes.tablet.paragraph,
+			large: fontSizes.tablet.bodyM,
 		},
 		lineHeight: {
-			small: '14px',
-			medium: '20px',
-			large: '26px',
+			small: lineHeights.tablet.label,
+			medium: lineHeights.tablet.paragraph,
+			large: lineHeights.tablet.bodyM,
 		},
 	},
 	mobile: {
 		fontSize: {
-			small: '0.625rem',
-			medium: '0.75rem',
-			large: '1rem',
+			small: fontSizes.mobile.label,
+			medium: fontSizes.mobile.paragraph,
+			large: fontSizes.mobile.bodyM,
 		},
 		lineHeight: {
-			small: '12px',
-			medium: '16px',
-			large: '24px',
+			small: lineHeights.mobile.label,
+			medium: lineHeights.mobile.paragraph,
+			large: lineHeights.mobile.bodyM,
 		},
 	},
 }

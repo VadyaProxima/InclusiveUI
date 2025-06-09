@@ -56,7 +56,7 @@ export const InputWithValidation: React.FC<InputWithValidationProps> = ({
 		message,
 		validate,
 		isDirty,
-	} = useInputValidation(initialValue, validators)
+	} = useInputValidation(initialValue, validators, validateOnChange)
 
 	// Запускаем валидацию сразу после монтирования, если есть начальное значение
 	React.useEffect(() => {

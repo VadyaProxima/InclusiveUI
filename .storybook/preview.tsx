@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@emotion/react'
 import { Preview } from '@storybook/react'
 import React from 'react'
-import { lightTheme } from '../src/theme'
+import { darkTheme, lightTheme } from '../src/theme'
 
 const preview: Preview = {
 	parameters: {
@@ -13,12 +13,30 @@ const preview: Preview = {
 		},
 		actions: { argTypesRegex: '^on[A-Z].*' },
 	},
+	globalTypes: {
+		theme: {
+			name: 'Theme',
+			description: 'Global theme for components',
+			defaultValue: 'light',
+			toolbar: {
+				icon: 'circlehollow',
+				items: [
+					{ value: 'light', icon: 'circlehollow', title: 'Light' },
+					{ value: 'dark', icon: 'circle', title: 'Dark' },
+				],
+				showName: true,
+			},
+		},
+	},
 	decorators: [
-		Story => (
-			<ThemeProvider theme={lightTheme}>
-				<Story />
-			</ThemeProvider>
-		),
+		(Story, context) => {
+			const theme = context.globals.theme === 'dark' ? darkTheme : lightTheme
+			return (
+				<ThemeProvider theme={theme}>
+					<Story />
+				</ThemeProvider>
+			)
+		},
 	],
 	tags: ['autodocs'],
 }

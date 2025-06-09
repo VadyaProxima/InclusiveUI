@@ -52,22 +52,33 @@ export class InputValidator {
 		value: string,
 		validators: Array<(value: string) => ValidationResult>
 	): ValidationResult {
-		// Если нет валидаторов, возвращаем default
 		if (!validators || validators.length === 0) {
 			return InputValidator.default()
 		}
 
-		// Применяем валидаторы последовательно
+		let bestResult: ValidationResult = InputValidator.default()
+
 		for (const validator of validators) {
-			const result = validator(value)
-			// Если нашли ошибку или предупреждение, возвращаем результат
-			if (result.status !== 'default') {
-				return result
+			const currentResult = validator(value)
+
+			if (currentResult.status === 'danger') {
+				return currentResult // Danger is a hard stop.
+			}
+
+			if (currentResult.status === 'warning') {
+				// If we don't have a warning yet, take this one.
+				// We keep checking for dangers.
+				if (bestResult.status !== 'warning') {
+					bestResult = currentResult
+				}
+			} else if (currentResult.status === 'success') {
+				// Success is only taken if we don't already have a warning.
+				if (bestResult.status !== 'warning') {
+					bestResult = currentResult
+				}
 			}
 		}
-
-		// Если все проверки прошли успешно
-		return InputValidator.success('Валидация пройдена')
+		return bestResult
 	}
 }
 
@@ -188,7 +199,8 @@ export const Validators = {
 // Хук для использования валидации в компонентах React
 export function useInputValidation(
 	initialValue = '',
-	validators: Array<(value: string) => ValidationResult> = []
+	validators: Array<(value: string) => ValidationResult> = [],
+	validateOnChange = true
 ) {
 	const [value, setValue] = React.useState(initialValue)
 	const [validationResult, setValidationResult] =
@@ -211,12 +223,16 @@ export function useInputValidation(
 			const newValue = e.target.value
 			setValue(newValue)
 
-			// Запускаем валидацию при каждом изменении, если поле уже было помечено как dirty
-			if (isDirty) {
+			if (validateOnChange) {
+				if (!isDirty) {
+					setIsDirty(true)
+				}
+				validateValue(newValue)
+			} else if (isDirty) {
 				validateValue(newValue)
 			}
 		},
-		[validators, isDirty, validateValue]
+		[validateOnChange, isDirty, validateValue]
 	)
 
 	// Валидация при потере фокуса
