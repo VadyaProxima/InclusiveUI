@@ -28,6 +28,11 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string
 	status?: 'default' | 'success' | 'warning' | 'danger'
 	device?: 'desktop' | 'tablet' | 'mobile'
+	'aria-label': string
+	'aria-describedby'?: string
+	'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling'
+	'aria-required'?: boolean | 'false' | 'true'
+	'aria-autocomplete'?: 'none' | 'inline' | 'list' | 'both'
 }
 
 // Получение токенов по устройству
@@ -227,6 +232,11 @@ export const Input: React.FC<InputProps> = ({
 	disabled = false,
 	status = 'default',
 	device = 'desktop',
+	'aria-label': ariaLabel,
+	'aria-describedby': ariaDescribedBy,
+	'aria-invalid': ariaInvalid,
+	'aria-required': ariaRequired,
+	'aria-autocomplete': ariaAutocomplete,
 	...props
 }) => {
 	const theme = useTheme() as Theme
@@ -257,6 +267,11 @@ export const Input: React.FC<InputProps> = ({
 					hasRightIcon={hasRightIcon}
 					status={status}
 					device={device}
+					aria-label={ariaLabel}
+					aria-describedby={ariaDescribedBy}
+					aria-invalid={ariaInvalid}
+					aria-required={ariaRequired}
+					aria-autocomplete={ariaAutocomplete}
 					{...props}
 				/>
 				{hasRightIcon && (
