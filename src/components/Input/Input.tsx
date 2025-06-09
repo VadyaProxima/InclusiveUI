@@ -247,15 +247,26 @@ export const Input: React.FC<InputProps> = ({
 		[id]
 	)
 
+	// Генерируем уникальный ID для label если он есть
+	const labelId = label ? `${uniqueId}-label` : undefined
+
+	// Автоматически устанавливаем aria-invalid на основе status
+	const computedAriaInvalid = ariaInvalid ?? status === 'danger'
+
 	return (
 		<InputContainer>
 			{label && (
-				<StyledLabel htmlFor={uniqueId} device={device} disabled={disabled}>
+				<StyledLabel
+					id={labelId}
+					htmlFor={uniqueId}
+					device={device}
+					disabled={disabled}
+				>
 					{label}
 				</StyledLabel>
 			)}
 			<InputWrapper>
-				{hasLeftIcon && (
+				{leftIcon && (
 					<IconWrapper position="left" device={device}>
 						{leftIcon}
 					</IconWrapper>
@@ -268,13 +279,15 @@ export const Input: React.FC<InputProps> = ({
 					status={status}
 					device={device}
 					aria-label={ariaLabel}
+					aria-labelledby={label ? labelId : undefined}
 					aria-describedby={ariaDescribedBy}
-					aria-invalid={ariaInvalid}
+					aria-invalid={computedAriaInvalid}
 					aria-required={ariaRequired}
 					aria-autocomplete={ariaAutocomplete}
+					aria-disabled={disabled}
 					{...props}
 				/>
-				{hasRightIcon && (
+				{rightIcon && (
 					<IconWrapper position="right" device={device}>
 						{rightIcon}
 					</IconWrapper>
