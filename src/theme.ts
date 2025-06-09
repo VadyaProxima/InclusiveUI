@@ -85,6 +85,57 @@ export const lightTheme = {
 				disabledText: colors.light.gray[900],
 			},
 		},
+		checkbox: {
+			default: {
+				background: 'transparent',
+				border: colors.light.gray[200],
+			},
+			hover: {
+				border: colors.light.blue[500],
+			},
+			checked: {
+				background: 'transparent',
+				border: colors.light.blue[500],
+				text: colors.light.blue[500], // for checkmark icon
+			},
+			disabled: {
+				background: 'transparent',
+				border: colors.light.gray[200],
+			},
+		},
+		input: {
+			default: {
+				background: 'transparent',
+				text: colors.light.gray[900],
+				border: colors.light.gray[500],
+				placeholder: colors.light.gray[600],
+				label: colors.light.gray[700],
+			},
+			hover: {
+				border: colors.light.gray[300],
+			},
+			focus: {
+				border: colors.light.blue[500],
+				shadow: colors.light.blue[200],
+			},
+			disabled: {
+				background: colors.light.gray[100],
+				text: colors.light.gray[400],
+				border: colors.light.gray[200],
+			},
+			error: {
+				border: colors.light.red[500],
+				shadow: colors.light.red[200],
+			},
+			success: {
+				border: colors.light.green[500],
+				shadow: colors.light.green[200],
+			},
+			warning: {
+				border: colors.light.gold[500],
+				shadow: colors.light.gold[200],
+			},
+		},
 		// ... другие семантические цвета для других компонентов
 	},
 	// Добавляем брейкпоинты (примерные значения)
@@ -169,6 +220,57 @@ export const darkTheme = {
 				focusShadow: 'rgba(255, 255, 255, 0.25)',
 				disabledBackground: colors.dark.gray[200],
 				disabledText: colors.dark.gray[900],
+			},
+		},
+		checkbox: {
+			default: {
+				background: 'transparent',
+				border: colors.dark.gray[200],
+			},
+			hover: {
+				border: colors.dark.blue[500],
+			},
+			checked: {
+				background: 'transparent',
+				border: colors.dark.blue[500],
+				text: colors.dark.blue[500], // for checkmark icon
+			},
+			disabled: {
+				background: 'transparent',
+				border: colors.dark.gray[200],
+			},
+		},
+		input: {
+			default: {
+				background: colors.dark.gray[50],
+				text: colors.dark.gray[900],
+				border: colors.dark.gray[200],
+				placeholder: colors.dark.gray[500],
+				label: colors.dark.gray[700],
+			},
+			hover: {
+				border: colors.dark.gray[300],
+			},
+			focus: {
+				border: colors.dark.blue[500],
+				shadow: colors.dark.blue[200],
+			},
+			disabled: {
+				background: colors.dark.gray[100],
+				text: colors.dark.gray[400],
+				border: colors.dark.gray[200],
+			},
+			error: {
+				border: colors.dark.red[500],
+				shadow: colors.dark.red[200],
+			},
+			success: {
+				border: colors.dark.green[500],
+				shadow: colors.dark.green[200],
+			},
+			warning: {
+				border: colors.dark.gold[500],
+				shadow: colors.dark.gold[200],
 			},
 		},
 	},

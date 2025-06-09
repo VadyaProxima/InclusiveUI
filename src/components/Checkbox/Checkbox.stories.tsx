@@ -1,13 +1,20 @@
 import { ThemeProvider } from '@emotion/react'
-import { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
-import { lightTheme } from '../../theme'
+import { Meta, StoryFn, StoryObj } from '@storybook/react'
+import React, { useState } from 'react'
+import { darkTheme, lightTheme } from '../../theme'
 import { Checkbox, CheckboxGroup } from './Checkbox'
 
 const meta: Meta<typeof Checkbox> = {
 	title: 'Components/Checkbox',
 	component: Checkbox,
 	tags: ['autodocs'],
+	decorators: [
+		Story => (
+			<ThemeProvider theme={lightTheme}>
+				<Story />
+			</ThemeProvider>
+		),
+	],
 }
 export default meta
 
@@ -366,4 +373,48 @@ export const ResponsiveCheckboxGroups: Story = {
 			</ThemeProvider>
 		)
 	},
+}
+
+// Темная тема
+export const DarkTheme: StoryFn = () => {
+	const [checked1, setChecked1] = React.useState(false)
+	const [checked2, setChecked2] = React.useState(true)
+	const [checked3, setChecked3] = React.useState(false)
+	const [indeterminate, setIndeterminate] = React.useState(true)
+
+	return (
+		<ThemeProvider theme={darkTheme}>
+			<div
+				style={{
+					padding: '20px',
+					background: darkTheme.colors.gray[100],
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '16px',
+				}}
+			>
+				<Checkbox
+					label="Обычный чекбокс"
+					checked={checked1}
+					onChange={e => setChecked1(e.target.checked)}
+				/>
+				<Checkbox
+					label="Отмеченный чекбокс"
+					checked={checked2}
+					onChange={e => setChecked2(e.target.checked)}
+				/>
+				<Checkbox
+					label="Неопределенное состояние"
+					checked={checked3}
+					indeterminate={indeterminate}
+					onChange={e => {
+						setChecked3(e.target.checked)
+						setIndeterminate(false)
+					}}
+				/>
+				<Checkbox label="Отключенный чекбокс" disabled />
+				<Checkbox label="Отключенный отмеченный чекбокс" checked disabled />
+			</div>
+		</ThemeProvider>
+	)
 }

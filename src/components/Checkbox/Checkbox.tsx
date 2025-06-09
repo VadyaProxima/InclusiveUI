@@ -1,14 +1,12 @@
-import { css, useTheme } from '@emotion/react'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React from 'react'
-import { Theme } from '../../theme'
 import {
 	checkboxBorderRadius,
 	checkboxBorderWidth,
 	checkboxFocusShadowSpread,
 	checkboxSize,
 } from '../../tokens/Checkbox'
-import { colors } from '../../tokens/colors'
 import {
 	fontFamily,
 	fontSizes,
@@ -49,6 +47,8 @@ const StyledWrapper = styled.label<{ disabled?: boolean }>`
 const StyledCheckbox = styled.input<{
 	device: 'desktop' | 'tablet' | 'mobile'
 	indeterminate?: boolean
+	checked?: boolean
+	disabled?: boolean
 }>`
 	appearance: none;
 	-webkit-appearance: none;
@@ -73,7 +73,7 @@ const StyledCheckbox = styled.input<{
 		width: 30%;
 		height: 60%;
 		border-style: solid;
-		border-color: ${colors.light.neutral.white};
+		border-color: ${p => p.theme.colors.checkbox.checked.text};
 		border-width: 0 2px 2px 0;
 		transform: translate(-50%, -60%) rotate(45deg);
 	}
@@ -86,51 +86,49 @@ const StyledCheckbox = styled.input<{
 		top: 50%;
 		width: 10px;
 		height: 2px;
-		background-color: ${colors.light.neutral.white};
+		background-color: ${p => p.theme.colors.checkbox.checked.text};
 		transform: translate(-50%, -50%);
 	}
 
 	${({ theme, checked, indeterminate, disabled, device }) => {
+		const { checkbox: c } = theme.colors
+
 		// Базовые стили
 		const baseStyles = css`
 			background-color: ${checked || indeterminate
-				? colors.light.blue[600]
-				: colors.light.neutral.white};
+				? c.checked.background
+				: c.default.background};
 			border-color: ${disabled
-				? colors.light.gray[200]
+				? c.disabled.border
 				: checked || indeterminate
-				? colors.light.blue[600]
-				: colors.light.gray[400]};
+				? c.checked.border
+				: c.default.border};
 		`
 
 		// Стили для hover
 		const hoverStyles = css`
 			&:hover:not(:disabled) {
-				border-color: ${checked || indeterminate
-					? colors.light.blue[500]
-					: colors.light.gray[300]};
+				border-color: ${c.hover.border};
 				background-color: ${checked || indeterminate
-					? colors.light.blue[500]
-					: colors.light.neutral.white};
+					? c.checked.background
+					: c.default.background};
 			}
 		`
 
 		// Стили для focus
 		const focusStyles = css`
 			&:focus-visible {
-				border-color: ${disabled
-					? colors.light.gray[200]
-					: colors.light.blue[700]};
+				border-color: ${disabled ? c.disabled.border : c.hover.border};
 				box-shadow: 0 0 0 ${getDeviceValue(checkboxFocusShadowSpread, device)}
-					rgba(0, 143, 243, 0.25);
+					${theme.colors.button.primary.focusShadow};
 			}
 		`
 
 		// Стили для disabled
 		const disabledStyles = disabled
 			? css`
-					background-color: ${colors.light.gray[100]};
-					border-color: ${colors.light.gray[200]};
+					background-color: ${c.disabled.background};
+					border-color: ${c.disabled.border};
 					cursor: not-allowed;
 			  `
 			: css``
@@ -161,8 +159,8 @@ const StyledLabel = styled.span<{
 	font-size: ${({ device }) => fontSizes[device].paragraph};
 	line-height: ${({ device }) => lineHeights[device].paragraph};
 	font-weight: ${fontWeights.paragraph};
-	color: ${({ disabled }) =>
-		disabled ? colors.light.gray[500] : colors.light.gray[1000]};
+	color: ${({ disabled, theme }) =>
+		disabled ? theme.colors.text.Disabled : theme.colors.text.Base};
 `
 
 // Стилизованная группа чекбоксов
@@ -201,7 +199,6 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 	id,
 	...rest
 }) => {
-	const theme = useTheme() as Theme
 	const checkboxRef = React.useRef<HTMLInputElement>(null)
 	const uniqueId = React.useMemo(
 		() => id || `checkbox-${Math.random().toString(36).substring(2, 11)}`,
@@ -226,7 +223,6 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 					onChange={onChange}
 					device={device}
 					indeterminate={indeterminate}
-					theme={theme}
 					id={uniqueId}
 					{...rest}
 				/>

@@ -180,7 +180,7 @@ export const AllThemes: StoryFn<InputProps> = args => (
 					alignItems: 'center',
 					flexWrap: 'wrap',
 					padding: '20px',
-					background: darkTheme.colors.gray[100],
+					background: darkTheme.colors.gray[50],
 				}}
 			>
 				<Input {...args} status="default" />
@@ -322,3 +322,50 @@ export const RequiredField: StoryFn<InputWithValidationProps> = () => {
 	)
 }
 
+// Темная тема
+export const DarkTheme: StoryFn<InputProps> = args => (
+	<ThemeProvider theme={darkTheme}>
+		<div
+			style={{
+				padding: '20px',
+				background: darkTheme.colors.gray[50],
+			}}
+		>
+			<div style={{ marginBottom: '20px' }}>
+				<Input {...args} status="default" label="Default Input" />
+			</div>
+			<div style={{ marginBottom: '20px' }}>
+				<Input
+					{...args}
+					status="success"
+					label="Success Input"
+					leftIcon={<Check size={18} />}
+				/>
+			</div>
+			<div style={{ marginBottom: '20px' }}>
+				<Input
+					{...args}
+					status="warning"
+					label="Warning Input"
+					leftIcon={<AlertTriangle size={18} />}
+				/>
+			</div>
+			<div style={{ marginBottom: '20px' }}>
+				<Input
+					{...args}
+					status="danger"
+					label="Error Input"
+					leftIcon={<XCircle size={18} />}
+				/>
+			</div>
+			<div style={{ marginBottom: '20px' }}>
+				<Input {...args} status="default" label="Disabled Input" disabled />
+			</div>
+		</div>
+	</ThemeProvider>
+)
+
+DarkTheme.args = {
+	placeholder: 'Введите значение',
+	device: 'desktop',
+}
