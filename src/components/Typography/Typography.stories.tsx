@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import type { Meta, StoryObj } from '@storybook/react'
+import React from 'react'
 import { darkTheme, lightTheme } from '../../theme'
 import Typography from './Typography'
 

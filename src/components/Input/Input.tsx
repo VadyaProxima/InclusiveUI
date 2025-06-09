@@ -2,7 +2,6 @@ import { css, useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { InputHTMLAttributes, ReactNode } from 'react'
 import { Theme } from '../../theme'
-import { colors } from '../../tokens/colors'
 import {
 	inputBorderRadius,
 	inputHeight,
@@ -51,8 +50,10 @@ const StyledLabel = styled.label<{
 	font-size: ${({ device }) => fontSizes[device].label};
 	line-height: ${({ device }) => lineHeights[device].label};
 	font-weight: ${fontWeights.label};
-	color: ${({ disabled }) =>
-		disabled ? colors.light.gray[400] : colors.light.gray[600]};
+	color: ${({ disabled, theme }) =>
+		disabled
+			? theme.colors.input.disabled.text
+			: theme.colors.input.default.label};
 	margin-bottom: ${({ device }) =>
 		`${getDeviceValue(padding, device).vertical.tiny}px`};
 `
@@ -90,7 +91,7 @@ const IconWrapper = styled.span<{
 	width: ${({ device }) => getDeviceValue(inputIconSize, device)};
 	height: ${({ device }) => getDeviceValue(inputIconSize, device)};
 	pointer-events: none;
-	color: ${colors.light.gray[900]};
+	color: ${({ theme }) => theme.colors.input.default.text};
 `
 
 // Стилизованный инпут
@@ -104,7 +105,7 @@ const StyledInput = styled.input<{
 	font-size: ${({ device }) => fontSizes[device].bodyS};
 	line-height: ${({ device }) => lineHeights[device].bodyS};
 	font-weight: ${fontWeights.body};
-	color: ${colors.light.gray[900]};
+	color: ${({ theme }) => theme.colors.input.default.text};
 
 	width: ${({ device }) => getDeviceValue(inputWidth, device)};
 	height: ${({ device }) => getDeviceValue(inputHeight, device)}px;
@@ -135,7 +136,7 @@ const StyledInput = styled.input<{
 		`${getDeviceValue(inputPaddingVertical, device)}px`};
 
 	border-radius: ${({ device }) =>
-		`${getDeviceValue(inputBorderRadius, device)}px`};
+		`${getDeviceValue(inputBorderRadius, device)}`};
 	border-width: ${({ device }) => getDeviceValue(inputStrokeWidth, device)};
 	border-style: solid;
 	box-sizing: border-box;
@@ -144,34 +145,35 @@ const StyledInput = styled.input<{
 	transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
 
 	&::placeholder {
-		color: ${colors.light.gray[900]};
-		opacity: 0.5;
+		color: ${({ theme }) => theme.colors.input.default.placeholder};
+		opacity: 1;
 		font-size: ${({ device }) => fontSizes[device].bodyS};
 		line-height: ${({ device }) => lineHeights[device].bodyS};
 	}
 
 	${({ theme, status, disabled, device }) => {
+		const { input: i } = theme.colors
 		// Базовые стили для разных статусов
 		const getBorderColor = () => {
-			if (disabled) return colors.light.gray[500]
+			if (disabled) return i.disabled.border
 
 			switch (status) {
 				case 'success':
-					return colors.light.green[600]
+					return i.success.border
 				case 'warning':
-					return colors.light.gold[300]
+					return i.warning.border
 				case 'danger':
-					return colors.light.red[600]
+					return i.error.border
 				default:
-					return colors.light.gray[500]
+					return i.default.border
 			}
 		}
 
 		// Базовые стили
 		const baseStyles = css`
 			background-color: ${disabled
-				? colors.light.gray[100]
-				: colors.light.neutral.white};
+				? i.disabled.background
+				: i.default.background};
 			border-color: ${getBorderColor()};
 			${disabled ? 'cursor: not-allowed;' : ''}
 		`
@@ -181,7 +183,7 @@ const StyledInput = styled.input<{
 			? css`
 					&:hover {
 						border-color: ${status === 'default'
-							? colors.light.gray[400]
+							? i.hover.border
 							: getBorderColor()};
 					}
 			  `
@@ -191,9 +193,9 @@ const StyledInput = styled.input<{
 		const focusStyles = !disabled
 			? css`
 					&:focus-visible {
-						border-color: ${colors.light.blue[600]};
+						border-color: ${i.focus.border};
 						box-shadow: 0 0 0 ${getDeviceValue(inputShadowSpread, device)}
-							rgba(0, 143, 243, 0.25);
+							${i.focus.shadow};
 					}
 			  `
 			: css``
@@ -201,9 +203,9 @@ const StyledInput = styled.input<{
 		// Стили для disabled
 		const disabledStyles = disabled
 			? css`
-					color: ${colors.light.gray[400]};
+					color: ${i.disabled.text};
 					&::placeholder {
-						color: ${colors.light.gray[400]};
+						color: ${i.disabled.text};
 					}
 			  `
 			: css``
@@ -251,11 +253,10 @@ export const Input: React.FC<InputProps> = ({
 				<StyledInput
 					id={uniqueId}
 					disabled={disabled}
-					status={status}
-					device={device}
 					hasLeftIcon={hasLeftIcon}
 					hasRightIcon={hasRightIcon}
-					theme={theme}
+					status={status}
+					device={device}
 					{...props}
 				/>
 				{hasRightIcon && (

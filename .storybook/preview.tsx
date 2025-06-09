@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import { Preview } from '@storybook/react'
+import React from 'react'
 import { lightTheme } from '../src/theme'
 
 const preview: Preview = {
