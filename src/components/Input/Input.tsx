@@ -48,19 +48,29 @@ const InputContainer = styled.div`
 
 // Стилизованный лейбл
 const StyledLabel = styled.label<{
-	device: 'desktop' | 'tablet' | 'mobile'
 	disabled?: boolean
 }>`
 	font-family: ${fontFamily.sans};
-	font-size: ${({ device }) => fontSizes[device].label};
-	line-height: ${({ device }) => lineHeights[device].label};
+	font-size: ${fontSizes.mobile.label};
+	line-height: ${lineHeights.mobile.label};
 	font-weight: ${fontWeights.label};
 	color: ${({ disabled, theme }) =>
 		disabled
 			? theme.colors.input.disabled.text
 			: theme.colors.input.default.label};
-	margin-bottom: ${({ device }) =>
-		`${getDeviceValue(padding, device).vertical.tiny}px`};
+	margin-bottom: ${padding.mobile.vertical.tiny}px;
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+		font-size: ${fontSizes.tablet.label};
+		line-height: ${lineHeights.tablet.label};
+		margin-bottom: ${padding.tablet.vertical.tiny}px;
+	}
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+		font-size: ${fontSizes.desktop.label};
+		line-height: ${lineHeights.desktop.label};
+		margin-bottom: ${padding.desktop.vertical.tiny}px;
+	}
 `
 
 // Обертка для инпута и иконок
@@ -74,7 +84,6 @@ const InputWrapper = styled.div`
 // Иконка внутри инпута
 const IconWrapper = styled.span<{
 	position: 'left' | 'right'
-	device: 'desktop' | 'tablet' | 'mobile'
 }>`
 	position: absolute;
 	display: flex;
@@ -82,21 +91,54 @@ const IconWrapper = styled.span<{
 	justify-content: center;
 	top: 50%;
 	transform: translateY(-50%);
-	${({ position, device }) => {
+	width: ${inputIconSize.mobile};
+	height: ${inputIconSize.mobile};
+	pointer-events: none;
+	color: ${({ theme }) => theme.colors.input.default.text};
+
+	${({ position }) => {
 		if (position === 'left') {
 			return css`
-				left: ${getDeviceValue(inputPaddingHorizontal, device)}px;
+				left: ${inputPaddingHorizontal.mobile}px;
 			`
 		} else {
 			return css`
-				right: ${getDeviceValue(inputPaddingHorizontal, device)}px;
+				right: ${inputPaddingHorizontal.mobile}px;
 			`
 		}
 	}}
-	width: ${({ device }) => getDeviceValue(inputIconSize, device)};
-	height: ${({ device }) => getDeviceValue(inputIconSize, device)};
-	pointer-events: none;
-	color: ${({ theme }) => theme.colors.input.default.text};
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+		width: ${inputIconSize.tablet};
+		height: ${inputIconSize.tablet};
+		${({ position }) => {
+			if (position === 'left') {
+				return css`
+					left: ${inputPaddingHorizontal.tablet}px;
+				`
+			} else {
+				return css`
+					right: ${inputPaddingHorizontal.tablet}px;
+				`
+			}
+		}}
+	}
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+		width: ${inputIconSize.desktop};
+		height: ${inputIconSize.desktop};
+		${({ position }) => {
+			if (position === 'left') {
+				return css`
+					left: ${inputPaddingHorizontal.desktop}px;
+				`
+			} else {
+				return css`
+					right: ${inputPaddingHorizontal.desktop}px;
+				`
+			}
+		}}
+	}
 `
 
 // Стилизованный инпут
@@ -107,42 +149,39 @@ const StyledInput = styled.input<{
 	device: 'desktop' | 'tablet' | 'mobile'
 }>`
 	font-family: ${fontFamily.sans};
-	font-size: ${({ device }) => fontSizes[device].bodyS};
-	line-height: ${({ device }) => lineHeights[device].bodyS};
+	font-size: ${fontSizes.mobile.bodyS};
+	line-height: ${lineHeights.mobile.bodyS};
 	font-weight: ${fontWeights.body};
 	color: ${({ theme }) => theme.colors.input.default.text};
 
-	width: ${({ device }) => getDeviceValue(inputWidth, device)};
-	height: ${({ device }) => getDeviceValue(inputHeight, device)}px;
+	width: ${inputWidth.mobile};
+	height: ${inputHeight.mobile}px;
 
-	padding-left: ${({ device, hasLeftIcon }) => {
-		const basePadding = getDeviceValue(inputPaddingHorizontal, device)
+	padding-left: ${({ hasLeftIcon }) => {
+		const basePadding = inputPaddingHorizontal.mobile
 		if (hasLeftIcon) {
-			const iconSize = getDeviceValue(inputIconSize, device).replace('px', '')
-			const gap = getDeviceValue(inputHorizontalGap, device)
+			const iconSize = inputIconSize.mobile.replace('px', '')
+			const gap = inputHorizontalGap.mobile
 			return `calc(${basePadding}px + ${iconSize}px + ${gap}px)`
 		}
 		return `${basePadding}px`
 	}};
 
-	padding-right: ${({ device, hasRightIcon }) => {
-		const basePadding = getDeviceValue(inputPaddingHorizontal, device)
+	padding-right: ${({ hasRightIcon }) => {
+		const basePadding = inputPaddingHorizontal.mobile
 		if (hasRightIcon) {
-			const iconSize = getDeviceValue(inputIconSize, device).replace('px', '')
-			const gap = getDeviceValue(inputHorizontalGap, device)
+			const iconSize = inputIconSize.mobile.replace('px', '')
+			const gap = inputHorizontalGap.mobile
 			return `calc(${basePadding}px + ${iconSize}px + ${gap}px)`
 		}
 		return `${basePadding}px`
 	}};
 
-	padding-top: ${({ device }) =>
-		`${getDeviceValue(inputPaddingVertical, device)}px`};
-	padding-bottom: ${({ device }) =>
-		`${getDeviceValue(inputPaddingVertical, device)}px`};
+	padding-top: ${inputPaddingVertical.mobile}px;
+	padding-bottom: ${inputPaddingVertical.mobile}px;
 
-	border-radius: ${({ device }) =>
-		`${getDeviceValue(inputBorderRadius, device)}`};
-	border-width: ${({ device }) => getDeviceValue(inputStrokeWidth, device)};
+	border-radius: ${inputBorderRadius.mobile};
+	border-width: ${inputStrokeWidth.mobile};
 	border-style: solid;
 	box-sizing: border-box;
 
@@ -152,11 +191,79 @@ const StyledInput = styled.input<{
 	&::placeholder {
 		color: ${({ theme }) => theme.colors.input.default.placeholder};
 		opacity: 1;
-		font-size: ${({ device }) => fontSizes[device].bodyS};
-		line-height: ${({ device }) => lineHeights[device].bodyS};
+		font-size: ${fontSizes.mobile.bodyS};
+		line-height: ${lineHeights.mobile.bodyS};
 	}
 
-	${({ theme, status, disabled, device }) => {
+	/* Tablet */
+	@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+		font-size: ${fontSizes.tablet.bodyS};
+		line-height: ${lineHeights.tablet.bodyS};
+		width: ${inputWidth.tablet};
+		height: ${inputHeight.tablet}px;
+		padding-left: ${({ hasLeftIcon }) => {
+			const basePadding = inputPaddingHorizontal.tablet
+			if (hasLeftIcon) {
+				const iconSize = inputIconSize.tablet.replace('px', '')
+				const gap = inputHorizontalGap.tablet
+				return `calc(${basePadding}px + ${iconSize}px + ${gap}px)`
+			}
+			return `${basePadding}px`
+		}};
+		padding-right: ${({ hasRightIcon }) => {
+			const basePadding = inputPaddingHorizontal.tablet
+			if (hasRightIcon) {
+				const iconSize = inputIconSize.tablet.replace('px', '')
+				const gap = inputHorizontalGap.tablet
+				return `calc(${basePadding}px + ${iconSize}px + ${gap}px)`
+			}
+			return `${basePadding}px`
+		}};
+		padding-top: ${inputPaddingVertical.tablet}px;
+		padding-bottom: ${inputPaddingVertical.tablet}px;
+		border-radius: ${inputBorderRadius.tablet};
+		border-width: ${inputStrokeWidth.tablet};
+		&::placeholder {
+			font-size: ${fontSizes.tablet.bodyS};
+			line-height: ${lineHeights.tablet.bodyS};
+		}
+	}
+
+	/* Desktop */
+	@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+		font-size: ${fontSizes.desktop.bodyS};
+		line-height: ${lineHeights.desktop.bodyS};
+		width: ${inputWidth.desktop};
+		height: ${inputHeight.desktop}px;
+		padding-left: ${({ hasLeftIcon }) => {
+			const basePadding = inputPaddingHorizontal.desktop
+			if (hasLeftIcon) {
+				const iconSize = inputIconSize.desktop.replace('px', '')
+				const gap = inputHorizontalGap.desktop
+				return `calc(${basePadding}px + ${iconSize}px + ${gap}px)`
+			}
+			return `${basePadding}px`
+		}};
+		padding-right: ${({ hasRightIcon }) => {
+			const basePadding = inputPaddingHorizontal.desktop
+			if (hasRightIcon) {
+				const iconSize = inputIconSize.desktop.replace('px', '')
+				const gap = inputHorizontalGap.desktop
+				return `calc(${basePadding}px + ${iconSize}px + ${gap}px)`
+			}
+			return `${basePadding}px`
+		}};
+		padding-top: ${inputPaddingVertical.desktop}px;
+		padding-bottom: ${inputPaddingVertical.desktop}px;
+		border-radius: ${inputBorderRadius.desktop};
+		border-width: ${inputStrokeWidth.desktop};
+		&::placeholder {
+			font-size: ${fontSizes.desktop.bodyS};
+			line-height: ${lineHeights.desktop.bodyS};
+		}
+	}
+
+	${({ theme, status, disabled }) => {
 		const { input: i } = theme.colors
 		// Базовые стили для разных статусов
 		const getBorderColor = () => {
@@ -199,8 +306,7 @@ const StyledInput = styled.input<{
 			? css`
 					&:focus-visible {
 						border-color: ${i.focus.border};
-						box-shadow: 0 0 0 ${getDeviceValue(inputShadowSpread, device)}
-							${i.focus.shadow};
+						box-shadow: 0 0 0 ${inputShadowSpread.mobile} ${i.focus.shadow};
 					}
 			  `
 			: css``
@@ -256,21 +362,12 @@ export const Input: React.FC<InputProps> = ({
 	return (
 		<InputContainer>
 			{label && (
-				<StyledLabel
-					id={labelId}
-					htmlFor={uniqueId}
-					device={device}
-					disabled={disabled}
-				>
+				<StyledLabel id={labelId} htmlFor={uniqueId} disabled={disabled}>
 					{label}
 				</StyledLabel>
 			)}
 			<InputWrapper>
-				{leftIcon && (
-					<IconWrapper position="left" device={device}>
-						{leftIcon}
-					</IconWrapper>
-				)}
+				{leftIcon && <IconWrapper position="left">{leftIcon}</IconWrapper>}
 				<StyledInput
 					id={uniqueId}
 					disabled={disabled}
@@ -287,11 +384,7 @@ export const Input: React.FC<InputProps> = ({
 					aria-disabled={disabled}
 					{...props}
 				/>
-				{rightIcon && (
-					<IconWrapper position="right" device={device}>
-						{rightIcon}
-					</IconWrapper>
-				)}
+				{rightIcon && <IconWrapper position="right">{rightIcon}</IconWrapper>}
 			</InputWrapper>
 		</InputContainer>
 	)
