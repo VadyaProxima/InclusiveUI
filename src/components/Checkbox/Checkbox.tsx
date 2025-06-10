@@ -20,7 +20,6 @@ interface CheckboxProps {
 	indeterminate?: boolean
 	disabled?: boolean
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-	device?: 'desktop' | 'tablet' | 'mobile'
 	label?: string
 	id?: string
 }
@@ -30,10 +29,6 @@ interface CheckboxGroupProps {
 	children: React.ReactNode
 	direction?: 'horizontal' | 'vertical'
 }
-
-// Получение токенов по устройству
-const getDeviceValue = (token: any, device: 'desktop' | 'tablet' | 'mobile') =>
-	token[device]
 
 // Основная обертка для чекбокса
 const StyledWrapper = styled.label<{ disabled?: boolean }>`
@@ -45,7 +40,6 @@ const StyledWrapper = styled.label<{ disabled?: boolean }>`
 
 // Стилизованный input с использованием встроенного чекбокса
 const StyledCheckbox = styled.input<{
-	device: 'desktop' | 'tablet' | 'mobile'
 	indeterminate?: boolean
 	checked?: boolean
 	disabled?: boolean
@@ -53,16 +47,30 @@ const StyledCheckbox = styled.input<{
 	appearance: none;
 	-webkit-appearance: none;
 	margin: 0;
-	width: ${p => getDeviceValue(checkboxSize, p.device)};
-	height: ${p => getDeviceValue(checkboxSize, p.device)};
-	border-radius: ${p => getDeviceValue(checkboxBorderRadius, p.device)};
-	border-width: ${p => getDeviceValue(checkboxBorderWidth, p.device)};
+	width: ${checkboxSize.mobile};
+	height: ${checkboxSize.mobile};
+	border-radius: ${checkboxBorderRadius.mobile};
+	border-width: ${checkboxBorderWidth.mobile};
 	border-style: solid;
 	outline: none;
 	flex-shrink: 0;
 
 	position: relative;
 	transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+
+	@media (min-width: ${p => p.theme.breakpoints.tablet}) {
+		width: ${checkboxSize.tablet};
+		height: ${checkboxSize.tablet};
+		border-radius: ${checkboxBorderRadius.tablet};
+		border-width: ${checkboxBorderWidth.tablet};
+	}
+
+	@media (min-width: ${p => p.theme.breakpoints.desktop}) {
+		width: ${checkboxSize.desktop};
+		height: ${checkboxSize.desktop};
+		border-radius: ${checkboxBorderRadius.desktop};
+		border-width: ${checkboxBorderWidth.desktop};
+	}
 
 	/* Имитация нативной галочки чекбокса без SVG */
 	&:checked:not(:indeterminate)::after {
@@ -90,7 +98,7 @@ const StyledCheckbox = styled.input<{
 		transform: translate(-50%, -50%);
 	}
 
-	${({ theme, checked, indeterminate, disabled, device }) => {
+	${({ theme, checked, indeterminate, disabled }) => {
 		const { checkbox: c } = theme.colors
 
 		// Базовые стили
@@ -119,8 +127,17 @@ const StyledCheckbox = styled.input<{
 		const focusStyles = css`
 			&:focus-visible {
 				border-color: ${disabled ? c.disabled.border : c.hover.border};
-				box-shadow: 0 0 0 ${getDeviceValue(checkboxFocusShadowSpread, device)}
+				box-shadow: 0 0 0 ${checkboxFocusShadowSpread.mobile}
 					${theme.colors.button.primary.focusShadow};
+
+				@media (min-width: ${theme.breakpoints.tablet}) {
+					box-shadow: 0 0 0 ${checkboxFocusShadowSpread.tablet}
+						${theme.colors.button.primary.focusShadow};
+				}
+				@media (min-width: ${theme.breakpoints.desktop}) {
+					box-shadow: 0 0 0 ${checkboxFocusShadowSpread.desktop}
+						${theme.colors.button.primary.focusShadow};
+				}
 			}
 		`
 
@@ -143,24 +160,37 @@ const StyledCheckbox = styled.input<{
 `
 
 // Компонент с паддингами для чекбокса
-const CheckboxPadding = styled.div<{ device: 'desktop' | 'tablet' | 'mobile' }>`
-	padding: ${({ device }) => (device === 'desktop' ? '10px' : '12px')};
+const CheckboxPadding = styled.div`
+	padding: 12px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	@media (min-width: ${p => p.theme.breakpoints.desktop}) {
+		padding: 10px;
+	}
 `
 
 // Стили для лейбла чекбокса
 const StyledLabel = styled.span<{
-	device: 'desktop' | 'tablet' | 'mobile'
 	disabled?: boolean
 }>`
 	font-family: ${fontFamily.sans};
-	font-size: ${({ device }) => fontSizes[device].paragraph};
-	line-height: ${({ device }) => lineHeights[device].paragraph};
+	font-size: ${fontSizes.mobile.paragraph};
+	line-height: ${lineHeights.mobile.paragraph};
 	font-weight: ${fontWeights.paragraph};
 	color: ${({ disabled, theme }) =>
 		disabled ? theme.colors.text.Disabled : theme.colors.text.Base};
+
+	@media (min-width: ${p => p.theme.breakpoints.tablet}) {
+		font-size: ${fontSizes.tablet.paragraph};
+		line-height: ${lineHeights.tablet.paragraph};
+	}
+
+	@media (min-width: ${p => p.theme.breakpoints.desktop}) {
+		font-size: ${fontSizes.desktop.paragraph};
+		line-height: ${lineHeights.desktop.paragraph};
+	}
 `
 
 // Стилизованная группа чекбоксов
@@ -194,7 +224,6 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 	indeterminate = false,
 	disabled = false,
 	onChange,
-	device = 'desktop',
 	label,
 	id,
 	...rest
@@ -214,24 +243,19 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 
 	return (
 		<StyledWrapper disabled={disabled} htmlFor={uniqueId}>
-			<CheckboxPadding device={device}>
+			<CheckboxPadding>
 				<StyledCheckbox
 					ref={checkboxRef}
 					type="checkbox"
 					checked={checked}
 					disabled={disabled}
 					onChange={onChange}
-					device={device}
 					indeterminate={indeterminate}
 					id={uniqueId}
 					{...rest}
 				/>
 			</CheckboxPadding>
-			{label && (
-				<StyledLabel device={device} disabled={disabled}>
-					{label}
-				</StyledLabel>
-			)}
+			{label && <StyledLabel disabled={disabled}>{label}</StyledLabel>}
 		</StyledWrapper>
 	)
 }

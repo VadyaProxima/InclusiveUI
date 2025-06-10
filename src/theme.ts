@@ -136,6 +136,10 @@ export const lightTheme = {
 				shadow: colors.light.gold[200],
 			},
 		},
+		modal: {
+			background: colors.light.neutral.white,
+			closeButtonHover: colors.light.gray[100],
+		},
 		// ... другие семантические цвета для других компонентов
 	},
 	// Добавляем брейкпоинты (примерные значения)
@@ -272,6 +276,10 @@ export const darkTheme = {
 				border: colors.dark.gold[500],
 				shadow: colors.dark.gold[200],
 			},
+		},
+		modal: {
+			background: colors.dark.coolGray[50],
+			closeButtonHover: colors.dark.coolGray[100],
 		},
 	},
 	// Добавляем брейкпоинты (примерные значения)

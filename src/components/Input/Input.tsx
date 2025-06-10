@@ -27,17 +27,12 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	rightIcon?: ReactNode
 	label?: string
 	status?: 'default' | 'success' | 'warning' | 'danger'
-	device?: 'desktop' | 'tablet' | 'mobile'
 	'aria-label': string
 	'aria-describedby'?: string
 	'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling'
 	'aria-required'?: boolean | 'false' | 'true'
 	'aria-autocomplete'?: 'none' | 'inline' | 'list' | 'both'
 }
-
-// Получение токенов по устройству
-const getDeviceValue = (token: any, device: 'desktop' | 'tablet' | 'mobile') =>
-	token[device]
 
 // Обертка для всего компонента
 const InputContainer = styled.div`
@@ -146,7 +141,6 @@ const StyledInput = styled.input<{
 	hasLeftIcon: boolean
 	hasRightIcon: boolean
 	status: 'default' | 'success' | 'warning' | 'danger'
-	device: 'desktop' | 'tablet' | 'mobile'
 }>`
 	font-family: ${fontFamily.sans};
 	font-size: ${fontSizes.mobile.bodyS};
@@ -307,6 +301,14 @@ const StyledInput = styled.input<{
 					&:focus-visible {
 						border-color: ${i.focus.border};
 						box-shadow: 0 0 0 ${inputShadowSpread.mobile} ${i.focus.shadow};
+
+						@media (min-width: ${theme.breakpoints.tablet}) {
+							box-shadow: 0 0 0 ${inputShadowSpread.tablet} ${i.focus.shadow};
+						}
+
+						@media (min-width: ${theme.breakpoints.desktop}) {
+							box-shadow: 0 0 0 ${inputShadowSpread.desktop} ${i.focus.shadow};
+						}
 					}
 			  `
 			: css``
@@ -337,7 +339,6 @@ export const Input: React.FC<InputProps> = ({
 	id,
 	disabled = false,
 	status = 'default',
-	device = 'desktop',
 	'aria-label': ariaLabel,
 	'aria-describedby': ariaDescribedBy,
 	'aria-invalid': ariaInvalid,
@@ -374,7 +375,6 @@ export const Input: React.FC<InputProps> = ({
 					hasLeftIcon={hasLeftIcon}
 					hasRightIcon={hasRightIcon}
 					status={status}
-					device={device}
 					aria-label={ariaLabel}
 					aria-labelledby={label ? labelId : undefined}
 					aria-describedby={ariaDescribedBy}
@@ -389,3 +389,5 @@ export const Input: React.FC<InputProps> = ({
 		</InputContainer>
 	)
 }
+
+export default Input

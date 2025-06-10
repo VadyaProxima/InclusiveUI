@@ -31,7 +31,7 @@ npm install InclusiveUI
 Импортируйте и используйте компоненты в вашем проекте:
 
 ```jsx
-import { Modal } from 'unifyui'
+import { Modal } from 'InclusiveUI'
 
 function App() {
 	return (

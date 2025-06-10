@@ -66,7 +66,7 @@ const ModalOverlay = styled.div`
 `
 
 const ModalContainer = styled.div`
-	background-color: ${colors.light.neutral.white};
+	background-color: ${({ theme }) => theme.colors.modal.background};
 	border-radius: ${borderRadius.desktop.small}; // 6px from Figma
 	box-shadow: 0px 3px 6px -4px rgba(0, 0, 0, 0.25),
 		0px 6px 16px 0px rgba(0, 0, 0, 0.25), 0px 9px 28px 8px rgba(0, 0, 0, 0.05); // From Figma (порядок из вашего комментария)
@@ -84,8 +84,8 @@ const ModalContainer = styled.div`
 	}
 
 	@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
-		width: ${modalWidth.desctop};
-		min-height: ${modalHeight.desctop};
+		width: ${modalWidth.desktop};
+		min-height: ${modalHeight.desktop};
 	}
 `
 
@@ -117,20 +117,27 @@ const CloseButton = styled.button`
 	margin-left: auto; // Прижимаем крестик вправо, если нет заголовка
 
 	&:hover {
-		background-color: ${colors.light.gray[50]};
+		background-color: ${({ theme }) => theme.colors.modal.closeButtonHover};
 	}
 `
 
 const StatusIconWrapper = styled.div`
 	width: 48px;
 	height: 48px;
-	padding: 8px; // (48-32)/2
+	padding: 8px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	margin-right: ${spacingTokens.desktop.horizontal
-		.small}px; // Отступ от текста (8px)
+	margin-right: ${spacingTokens.mobile.horizontal.small}px;
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+		margin-right: ${spacingTokens.tablet.horizontal.small}px;
+	}
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+		margin-right: ${spacingTokens.desktop.horizontal.small}px;
+	}
 `
 
 const StatusCircle = styled.div<{ variantColor: string }>`
@@ -157,22 +164,42 @@ const ModalBody = styled.section<{ variant: ModalVariant }>`
 const StatusVariantWrapper = styled.div`
 	display: flex;
 	align-items: flex-start; // Иконка и текст по верхнему краю
-	margin-bottom: ${spacingTokens.desktop.vertical
-		.medium}px; // Отступ под блоком статуса (16px)
+	margin-bottom: ${spacingTokens.mobile.vertical.medium}px;
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+		margin-bottom: ${spacingTokens.tablet.vertical.medium}px;
+	}
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+		margin-bottom: ${spacingTokens.desktop.vertical.medium}px;
+	}
 `
 
 const ModalFooter = styled.footer`
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	padding-top: ${spacingTokens.desktop.vertical
-		.medium}px; // Отступ от тела модалки (16px)
+	padding-top: ${spacingTokens.mobile.vertical.medium}px;
 	border-top: 1px solid ${colors.light.gray[100]};
 	box-sizing: border-box;
 	flex-shrink: 0;
 
 	& > *:not(:last-child) {
-		margin-right: ${spacingTokens.desktop.horizontal.small}px;
+		margin-right: ${spacingTokens.mobile.horizontal.small}px;
+	}
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+		padding-top: ${spacingTokens.tablet.vertical.medium}px;
+		& > *:not(:last-child) {
+			margin-right: ${spacingTokens.tablet.horizontal.small}px;
+		}
+	}
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+		padding-top: ${spacingTokens.desktop.vertical.medium}px;
+		& > *:not(:last-child) {
+			margin-right: ${spacingTokens.desktop.horizontal.small}px;
+		}
 	}
 `
 
