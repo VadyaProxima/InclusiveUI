@@ -22,7 +22,6 @@ interface RadioButtonProps {
 	checked?: boolean
 	disabled?: boolean
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-	device?: 'desktop' | 'tablet' | 'mobile'
 	label?: string
 	id?: string
 	name?: string
@@ -35,10 +34,6 @@ interface RadioButtonGroupProps {
 	direction?: 'horizontal' | 'vertical'
 }
 
-// Получение токенов по устройству
-const getDeviceValue = (token: any, device: 'desktop' | 'tablet' | 'mobile') =>
-	token[device]
-
 // Основная обертка для радиокнопки
 const StyledWrapper = styled.label<{ disabled?: boolean }>`
 	display: inline-flex;
@@ -48,16 +43,14 @@ const StyledWrapper = styled.label<{ disabled?: boolean }>`
 `
 
 // Стилизованный input с использованием встроенного radio
-const StyledRadioButton = styled.input<{
-	device: 'desktop' | 'tablet' | 'mobile'
-}>`
+const StyledRadioButton = styled.input`
 	appearance: none;
 	-webkit-appearance: none;
 	margin: 0;
-	width: ${radioButtonSize};
-	height: ${radioButtonSize};
+	width: ${radioButtonSize.mobile};
+	height: ${radioButtonSize.mobile};
 	border-radius: ${radioButtonBorderRadius};
-	border-width: ${radioButtonBorderWidth};
+	border-width: ${radioButtonBorderWidth.mobile};
 	border-style: solid;
 	outline: none;
 	flex-shrink: 0;
@@ -65,17 +58,39 @@ const StyledRadioButton = styled.input<{
 	position: relative;
 	transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
 
+	@media (min-width: ${p => p.theme.breakpoints.tablet}) {
+		width: ${radioButtonSize.tablet};
+		height: ${radioButtonSize.tablet};
+		border-width: ${radioButtonBorderWidth.tablet};
+	}
+
+	@media (min-width: ${p => p.theme.breakpoints.desktop}) {
+		width: ${radioButtonSize.desktop};
+		height: ${radioButtonSize.desktop};
+		border-width: ${radioButtonBorderWidth.desktop};
+	}
+
 	/* Круг внутри радиокнопки при checked состоянии */
 	&:checked::after {
 		content: '';
 		position: absolute;
 		left: 50%;
 		top: 50%;
-		width: ${radioButtonInnerCircleSize};
-		height: ${radioButtonInnerCircleSize};
+		width: ${radioButtonInnerCircleSize.mobile};
+		height: ${radioButtonInnerCircleSize.mobile};
 		background-color: currentColor;
 		border-radius: 50%;
 		transform: translate(-50%, -50%);
+
+		@media (min-width: ${p => p.theme.breakpoints.tablet}) {
+			width: ${radioButtonInnerCircleSize.tablet};
+			height: ${radioButtonInnerCircleSize.tablet};
+		}
+
+		@media (min-width: ${p => p.theme.breakpoints.desktop}) {
+			width: ${radioButtonInnerCircleSize.desktop};
+			height: ${radioButtonInnerCircleSize.desktop};
+		}
 	}
 
 	${({ theme, checked, disabled }) => {
@@ -111,8 +126,18 @@ const StyledRadioButton = styled.input<{
 					? colors.light.gray[200]
 					: colors.light.blue[700]};
 				color: ${disabled ? colors.light.gray[200] : colors.light.blue[700]};
-				box-shadow: 0 0 0 ${radioButtonFocusShadowSpread}
+				box-shadow: 0 0 0 ${radioButtonFocusShadowSpread.mobile}
 					rgba(0, 143, 243, 0.25);
+
+				@media (min-width: ${theme.breakpoints.tablet}) {
+					box-shadow: 0 0 0 ${radioButtonFocusShadowSpread.tablet}
+						rgba(0, 143, 243, 0.25);
+				}
+
+				@media (min-width: ${theme.breakpoints.desktop}) {
+					box-shadow: 0 0 0 ${radioButtonFocusShadowSpread.desktop}
+						rgba(0, 143, 243, 0.25);
+				}
 			}
 		`
 
@@ -135,26 +160,37 @@ const StyledRadioButton = styled.input<{
 `
 
 // Компонент с паддингами для радиокнопки
-const RadioButtonPadding = styled.div<{
-	device: 'desktop' | 'tablet' | 'mobile'
-}>`
-	padding: ${({ device }) => (device === 'desktop' ? '10px' : '12px')};
+const RadioButtonPadding = styled.div`
+	padding: 12px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	@media (min-width: ${p => p.theme.breakpoints.desktop}) {
+		padding: 10px;
+	}
 `
 
 // Стили для лейбла радиокнопки
 const StyledLabel = styled.span<{
-	device: 'desktop' | 'tablet' | 'mobile'
 	disabled?: boolean
 }>`
 	font-family: ${fontFamily.sans};
-	font-size: ${({ device }) => fontSizes[device].paragraph};
-	line-height: ${({ device }) => lineHeights[device].paragraph};
+	font-size: ${fontSizes.mobile.paragraph};
+	line-height: ${lineHeights.mobile.paragraph};
 	font-weight: ${fontWeights.paragraph};
 	color: ${({ disabled }) =>
 		disabled ? colors.light.gray[500] : colors.light.gray[1000]};
+
+	@media (min-width: ${p => p.theme.breakpoints.tablet}) {
+		font-size: ${fontSizes.tablet.paragraph};
+		line-height: ${lineHeights.tablet.paragraph};
+	}
+
+	@media (min-width: ${p => p.theme.breakpoints.desktop}) {
+		font-size: ${fontSizes.desktop.paragraph};
+		line-height: ${lineHeights.desktop.paragraph};
+	}
 `
 
 // Стилизованная группа радиокнопок
@@ -172,7 +208,6 @@ export const RadioButton: React.FC<RadioButtonProps> = ({
 	checked = false,
 	disabled = false,
 	onChange,
-	device = 'desktop',
 	label,
 	id,
 	name,
@@ -187,13 +222,12 @@ export const RadioButton: React.FC<RadioButtonProps> = ({
 
 	return (
 		<StyledWrapper disabled={disabled} htmlFor={uniqueId}>
-			<RadioButtonPadding device={device}>
+			<RadioButtonPadding>
 				<StyledRadioButton
 					type="radio"
 					checked={checked}
 					disabled={disabled}
 					onChange={onChange}
-					device={device}
 					theme={theme}
 					id={uniqueId}
 					name={name}
@@ -201,11 +235,7 @@ export const RadioButton: React.FC<RadioButtonProps> = ({
 					{...rest}
 				/>
 			</RadioButtonPadding>
-			{label && (
-				<StyledLabel device={device} disabled={disabled}>
-					{label}
-				</StyledLabel>
-			)}
+			{label && <StyledLabel disabled={disabled}>{label}</StyledLabel>}
 		</StyledWrapper>
 	)
 }

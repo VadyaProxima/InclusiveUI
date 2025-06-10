@@ -1,6 +1,7 @@
+import { ThemeProvider } from '@emotion/react'
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
-import { colors } from '../../tokens/colors'
+import { darkTheme, lightTheme } from '../../theme'
 import Typography from '../Typography/Typography'
 import { BreadcrumbItem } from './BreadcrumbItem'
 
@@ -9,16 +10,6 @@ const meta = {
 	component: BreadcrumbItem,
 	parameters: {
 		layout: 'centered',
-		docs: {
-			description: {
-				component: `
-### Размеры текста для разных устройств:
-- Desktop: 18px
-- Tablet: 16px
-- Mobile: 14px
-				`,
-			},
-		},
 	},
 	tags: ['autodocs'],
 } satisfies Meta<typeof BreadcrumbItem>
@@ -26,32 +17,18 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// Опции для выпадающего меню
 const dropdownOptions = [
 	{ value: 'option1', label: 'Категория 1' },
 	{ value: 'option2', label: 'Категория 2' },
 	{ value: 'option3', label: 'Категория 3' },
 ]
 
-// Компонент сепаратора
 const Separator = () => (
-	<div
-		style={{
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'center',
-			padding: '6px',
-			width: '30px',
-			height: '30px',
-		}}
-	>
-		<Typography variant="paragraph" color={colors.light.gray[800]}>
-			/
-		</Typography>
-	</div>
+	<Typography variant="paragraph" style={{ margin: '0 8px' }}>
+		/
+	</Typography>
 )
 
-// Обычная ссылка
 export const Default: Story = {
 	args: {
 		children: 'Главная',
@@ -59,7 +36,6 @@ export const Default: Story = {
 	},
 }
 
-// Активная ссылка
 export const Active: Story = {
 	args: {
 		children: 'Текущая страница',
@@ -68,7 +44,6 @@ export const Active: Story = {
 	},
 }
 
-// Ссылка с выпадающим меню
 export const WithDropdown: Story = {
 	args: {
 		children: 'Категории',
@@ -77,7 +52,6 @@ export const WithDropdown: Story = {
 	},
 }
 
-// Только иконка
 export const IconOnly: Story = {
 	args: {
 		iconOnly: true,
@@ -85,7 +59,6 @@ export const IconOnly: Story = {
 	},
 }
 
-// Иконка с выпадающим меню
 export const IconWithDropdown: Story = {
 	args: {
 		iconOnly: true,
@@ -94,115 +67,149 @@ export const IconWithDropdown: Story = {
 	},
 }
 
-// Мобильная версия
-export const Mobile: Story = {
-	args: {
-		children: 'Мобильная версия текста',
-		href: '#',
-		device: 'mobile',
-	},
-}
-
-// Планшетная версия
-export const Tablet: Story = {
-	args: {
-		children: 'Планшетная версия текста',
-		href: '#',
-		device: 'tablet',
-	},
-}
-
-// Группа хлебных крошек для разных устройств
-const BreadcrumbGroupTemplate: Story = {
-	render: args => (
-		<div
-			style={{ display: 'flex', alignItems: 'center', position: 'relative' }}
-		>
-			<BreadcrumbItem iconOnly href="#" device={args.device} isActive={false} />
+export const BreadcrumbTrail: Story = {
+	render: () => (
+		<div style={{ display: 'flex', alignItems: 'center' }}>
+			<BreadcrumbItem iconOnly href="#" />
 			<Separator />
-			<BreadcrumbItem href="#" device={args.device} isActive={false}>
-				Продукты
-			</BreadcrumbItem>
+			<BreadcrumbItem href="#">Продукты</BreadcrumbItem>
 			<Separator />
-			<BreadcrumbItem
-				hasDropdown
-				dropdownOptions={dropdownOptions}
-				device={args.device}
-				isActive={false}
-			>
+			<BreadcrumbItem hasDropdown dropdownOptions={dropdownOptions}>
 				Категории
 			</BreadcrumbItem>
 			<Separator />
-			<BreadcrumbItem device={args.device} isActive={true}>
-				Текущий элемент
-			</BreadcrumbItem>
+			<BreadcrumbItem isActive={true}>Текущий элемент</BreadcrumbItem>
 		</div>
 	),
 }
 
-// Группа с иконкой и дропдауном
-const BreadcrumbWithIconDropdownTemplate: Story = {
-	render: args => (
-		<div
-			style={{ display: 'flex', alignItems: 'center', position: 'relative' }}
-		>
-			<BreadcrumbItem
-				iconOnly
-				hasDropdown
-				dropdownOptions={dropdownOptions}
-				device={args.device}
-				isActive={false}
-			/>
-			<Separator />
-			<BreadcrumbItem href="#" device={args.device} isActive={false}>
-				Продукты
-			</BreadcrumbItem>
-			<Separator />
-			<BreadcrumbItem device={args.device} isActive={true}>
-				Текущий элемент
-			</BreadcrumbItem>
+export const AllVariants: Story = {
+	render: () => (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+			<div>
+				<h4>Обычные хлебные крошки</h4>
+				<div style={{ display: 'flex', alignItems: 'center' }}>
+					<BreadcrumbItem href="#">Главная</BreadcrumbItem>
+					<Separator />
+					<BreadcrumbItem href="#">Продукты</BreadcrumbItem>
+					<Separator />
+					<BreadcrumbItem isActive={true}>Текущий элемент</BreadcrumbItem>
+				</div>
+			</div>
+
+			<div>
+				<h4>С иконкой и дропдауном</h4>
+				<div style={{ display: 'flex', alignItems: 'center' }}>
+					<BreadcrumbItem iconOnly href="#" />
+					<Separator />
+					<BreadcrumbItem hasDropdown dropdownOptions={dropdownOptions}>
+						Категории
+					</BreadcrumbItem>
+					<Separator />
+					<BreadcrumbItem isActive={true}>Текущий элемент</BreadcrumbItem>
+				</div>
+			</div>
+
+			<div>
+				<h4>Только иконки</h4>
+				<div style={{ display: 'flex', alignItems: 'center' }}>
+					<BreadcrumbItem iconOnly href="#" />
+					<Separator />
+					<BreadcrumbItem
+						iconOnly
+						hasDropdown
+						dropdownOptions={dropdownOptions}
+					/>
+					<Separator />
+					<BreadcrumbItem iconOnly isActive={true} href="#" />
+				</div>
+			</div>
 		</div>
 	),
 }
 
-export const DesktopGroup = {
-	...BreadcrumbGroupTemplate,
-	args: {
-		device: 'desktop',
-	},
-}
+export const ThemeVariants: Story = {
+	render: () => (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+			<div>
+				<h3>Светлая тема</h3>
+				<ThemeProvider theme={lightTheme}>
+					<div
+						style={{
+							padding: '1rem',
+							background: lightTheme.colors.neutral.white,
+							borderRadius: '8px',
+						}}
+					>
+						<div style={{ marginBottom: '1rem' }}>
+							<div
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									marginBottom: '1rem',
+								}}
+							>
+								<BreadcrumbItem iconOnly href="#" />
+								<Separator />
+								<BreadcrumbItem href="#">Продукты</BreadcrumbItem>
+								<Separator />
+								<BreadcrumbItem isActive={true}>Текущий элемент</BreadcrumbItem>
+							</div>
+							<div style={{ display: 'flex', alignItems: 'center' }}>
+								<BreadcrumbItem iconOnly href="#" />
+								<Separator />
+								<BreadcrumbItem hasDropdown dropdownOptions={dropdownOptions}>
+									Категории
+								</BreadcrumbItem>
+								<Separator />
+								<BreadcrumbItem isActive={true}>
+									Активный элемент
+								</BreadcrumbItem>
+							</div>
+						</div>
+					</div>
+				</ThemeProvider>
+			</div>
 
-export const TabletGroup = {
-	...BreadcrumbGroupTemplate,
-	args: {
-		device: 'tablet',
-	},
-}
-
-export const MobileGroup = {
-	...BreadcrumbGroupTemplate,
-	args: {
-		device: 'mobile',
-	},
-}
-
-export const DesktopWithIconDropdown = {
-	...BreadcrumbWithIconDropdownTemplate,
-	args: {
-		device: 'desktop',
-	},
-}
-
-export const TabletWithIconDropdown = {
-	...BreadcrumbWithIconDropdownTemplate,
-	args: {
-		device: 'tablet',
-	},
-}
-
-export const MobileWithIconDropdown = {
-	...BreadcrumbWithIconDropdownTemplate,
-	args: {
-		device: 'mobile',
-	},
+			<div>
+				<h3>Темная тема</h3>
+				<ThemeProvider theme={darkTheme}>
+					<div
+						style={{
+							padding: '1rem',
+							background: darkTheme.colors.gray[100],
+							borderRadius: '8px',
+						}}
+					>
+						<div style={{ marginBottom: '1rem' }}>
+							<div
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									marginBottom: '1rem',
+								}}
+							>
+								<BreadcrumbItem iconOnly href="#" />
+								<Separator />
+								<BreadcrumbItem href="#">Продукты</BreadcrumbItem>
+								<Separator />
+								<BreadcrumbItem isActive={true}>Текущий элемент</BreadcrumbItem>
+							</div>
+							<div style={{ display: 'flex', alignItems: 'center' }}>
+								<BreadcrumbItem iconOnly href="#" />
+								<Separator />
+								<BreadcrumbItem hasDropdown dropdownOptions={dropdownOptions}>
+									Категории
+								</BreadcrumbItem>
+								<Separator />
+								<BreadcrumbItem isActive={true}>
+									Активный элемент
+								</BreadcrumbItem>
+							</div>
+						</div>
+					</div>
+				</ThemeProvider>
+			</div>
+		</div>
+	),
 }
