@@ -38,7 +38,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const InputContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: fit-content;
+	width: 100%;
 `
 
 // Стилизованный лейбл
@@ -189,6 +189,22 @@ const StyledInput = styled.input<{
 		line-height: ${lineHeights.mobile.bodyS};
 	}
 
+	&:focus-visible {
+		border-color: ${({ theme }) => theme.colors.input.focus.border};
+		box-shadow: 0 0 0 ${inputShadowSpread.mobile}
+			${({ theme }) => theme.colors.input.focus.shadow};
+
+		@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+			box-shadow: 0 0 0 ${inputShadowSpread.tablet}
+				${({ theme }) => theme.colors.input.focus.shadow};
+		}
+
+		@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+			box-shadow: 0 0 0 ${inputShadowSpread.desktop}
+				${({ theme }) => theme.colors.input.focus.shadow};
+		}
+	}
+
 	/* Tablet */
 	@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
 		font-size: ${fontSizes.tablet.bodyS};
@@ -295,24 +311,6 @@ const StyledInput = styled.input<{
 			  `
 			: css``
 
-		// Стили для focus
-		const focusStyles = !disabled
-			? css`
-					&:focus-visible {
-						border-color: ${i.focus.border};
-						box-shadow: 0 0 0 ${inputShadowSpread.mobile} ${i.focus.shadow};
-
-						@media (min-width: ${theme.breakpoints.tablet}) {
-							box-shadow: 0 0 0 ${inputShadowSpread.tablet} ${i.focus.shadow};
-						}
-
-						@media (min-width: ${theme.breakpoints.desktop}) {
-							box-shadow: 0 0 0 ${inputShadowSpread.desktop} ${i.focus.shadow};
-						}
-					}
-			  `
-			: css``
-
 		// Стили для disabled
 		const disabledStyles = disabled
 			? css`
@@ -326,7 +324,6 @@ const StyledInput = styled.input<{
 		return css`
 			${baseStyles}
 			${hoverStyles}
-			${focusStyles}
 			${disabledStyles}
 		`
 	}}
@@ -344,6 +341,7 @@ export const Input: React.FC<InputProps> = ({
 	'aria-invalid': ariaInvalid,
 	'aria-required': ariaRequired,
 	'aria-autocomplete': ariaAutocomplete,
+	onKeyDown,
 	...props
 }) => {
 	const theme = useTheme() as Theme
@@ -359,6 +357,15 @@ export const Input: React.FC<InputProps> = ({
 
 	// Автоматически устанавливаем aria-invalid на основе status
 	const computedAriaInvalid = ariaInvalid ?? status === 'danger'
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Escape') {
+			e.currentTarget.blur()
+		}
+		if (onKeyDown) {
+			onKeyDown(e)
+		}
+	}
 
 	return (
 		<InputContainer>
@@ -382,6 +389,7 @@ export const Input: React.FC<InputProps> = ({
 					aria-required={ariaRequired}
 					aria-autocomplete={ariaAutocomplete}
 					aria-disabled={disabled}
+					onKeyDown={handleKeyDown}
 					{...props}
 				/>
 				{rightIcon && <IconWrapper position="right">{rightIcon}</IconWrapper>}

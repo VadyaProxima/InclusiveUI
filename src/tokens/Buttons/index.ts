@@ -39,22 +39,27 @@ export const buttonTypography = {
 	},
 }
 
-export const buttonWidths = {
+// Фиксированные высоты для кнопок
+export const buttonHeights = {
 	desktop: {
-		large: '160px',
-		medium: '120px',
-		small: '100px',
+		large: '48px',
+		medium: '40px',
+		small: '32px',
 	},
 	tablet: {
-		large: '140px',
-		medium: '100px',
-		small: '95px',
+		large: '44px',
+		medium: '36px',
+		small: '28px',
 	},
 	mobile: {
-		large: '120px',
-		medium: '85px',
-		small: '90px',
+		large: '40px',
+		medium: '32px',
+		small: '24px',
 	},
+}
+
+// Минимальные размеры для кнопок только с иконкой
+export const buttonMinSizes = {
 	iconOnly: {
 		desktop: {
 			large: '48px',
@@ -92,37 +97,19 @@ export const buttonGap = {
 	},
 }
 
-export const buttonHeights = {
-	desktop: {
-		large: '48px',
-		medium: '40px',
-		small: '32px',
-	},
-	tablet: {
-		large: '44px',
-		medium: '36px',
-		small: '28px',
-	},
-	mobile: {
-		large: '40px',
-		medium: '32px',
-		small: '24px',
-	},
-}
-
 export const iconSizes = {
 	desktop: {
-		large: '32px',
-		medium: '24px',
+		large: '24px',
+		medium: '20px',
 		small: '16px',
 	},
 	tablet: {
-		large: '28px',
-		medium: '20px',
+		large: '20px',
+		medium: '18px',
 		small: '14px',
 	},
 	mobile: {
-		large: '24px',
+		large: '18px',
 		medium: '16px',
 		small: '12px',
 	},
@@ -143,29 +130,29 @@ type ButtonPaddingType = {
 
 export const buttonPadding: ButtonPaddingType = {
 	desktop: {
-		large: { vertical: '16px', horizontal: '20px' },
-		medium: { vertical: '14px', horizontal: '12px' },
-		small: { vertical: '10px', horizontal: '8px' },
-		iconOnly: { vertical: '8px', horizontal: '8px' },
+		large: { vertical: '0', horizontal: '24px' },
+		medium: { vertical: '0', horizontal: '16px' },
+		small: { vertical: '0', horizontal: '12px' },
+		iconOnly: { vertical: '0', horizontal: '0' },
 	},
 	tablet: {
-		large: { vertical: '14px', horizontal: '16px' },
-		medium: { vertical: '12px', horizontal: '10px' },
-		small: { vertical: '8px', horizontal: '6px' },
-		iconOnly: { vertical: '8px', horizontal: '8px' },
+		large: { vertical: '0', horizontal: '20px' },
+		medium: { vertical: '0', horizontal: '14px' },
+		small: { vertical: '0', horizontal: '10px' },
+		iconOnly: { vertical: '0', horizontal: '0' },
 	},
 	mobile: {
-		large: { vertical: '12px', horizontal: '12px' },
-		medium: { vertical: '10px', horizontal: '8px' },
-		small: { vertical: '6px', horizontal: '4px' },
-		iconOnly: { vertical: '8px', horizontal: '8px' },
+		large: { vertical: '0', horizontal: '16px' },
+		medium: { vertical: '0', horizontal: '12px' },
+		small: { vertical: '0', horizontal: '8px' },
+		iconOnly: { vertical: '0', horizontal: '0' },
 	},
 }
 
 export const buttonBorderWidth = {
-	desktop: '3px',
+	desktop: '2px',
 	tablet: '2px',
-	mobile: '2px',
+	mobile: '1px',
 }
 
 export const buttonBorderRadius = {

@@ -11,23 +11,30 @@ const PageContainer = styled.div`
 	align-items: center;
 	min-height: 100vh;
 	background-color: ${({ theme }) => theme.colors.gray[100]};
+	gap: 40px;
 `
 
 const FormContainer = styled.div`
-	padding: 40px;
+	padding: 60px;
 	background: ${({ theme }) => theme.colors.gray[50]};
 	border-radius: 8px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 	width: 100%;
-	max-width: 400px;
+	max-width: 500px;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+
+	&:focus-within {
+		outline: 2px solid ${({ theme }) => theme.colors.input.focus.border};
+		outline-offset: 2px;
+	}
 `
 
 const Title = styled(Typography)`
 	text-align: center;
 	margin-bottom: 8px;
+	white-space: nowrap;
 `
 
 const CheckboxContainer = styled.div`
@@ -51,13 +58,22 @@ export const AuthorizationPage = () => {
 		}
 	}
 
+	const handleKeyPress = (e: React.KeyboardEvent) => {
+		if (e.key === 'Enter' && isLoginValid && isPasswordValid) {
+			alert(`Login: ${login}, Password: ${password}`)
+		}
+	}
+
 	return (
 		<PageContainer>
-			<FormContainer>
-				<Title variant="heading3">Авторизация</Title>
+			<FormContainer role="form" aria-label="Форма авторизации">
+				<Title variant="heading3" id="auth-title">
+					Авторизация
+				</Title>
 				<InputWithValidation
 					label="Почта"
 					aria-label="Почта"
+					aria-describedby="auth-title"
 					placeholder="Введите ваш email"
 					value={login}
 					onChange={e => setLogin(e.target.value)}
@@ -65,10 +81,13 @@ export const AuthorizationPage = () => {
 					name="login"
 					validators={[Validators.required(), Validators.email()]}
 					onValidated={handleValidation}
+					className="input-full-width"
+					autoComplete="email"
 				/>
 				<InputWithValidation
 					label="Пароль"
 					aria-label="Пароль"
+					aria-describedby="auth-title"
 					placeholder="Введите ваш пароль"
 					type="password"
 					value={password}
@@ -81,6 +100,8 @@ export const AuthorizationPage = () => {
 						Validators.password(),
 					]}
 					onValidated={handleValidation}
+					className="input-full-width"
+					autoComplete="current-password"
 				/>
 				<CheckboxContainer>
 					<Checkbox
@@ -92,8 +113,9 @@ export const AuthorizationPage = () => {
 				</CheckboxContainer>
 				<Button
 					onClick={() => alert(`Login: ${login}, Password: ${password}`)}
+					onKeyPress={handleKeyPress}
 					aria-label="Войти"
-					size="small"
+					size="large"
 					disabled={!isLoginValid || !isPasswordValid}
 				>
 					Войти

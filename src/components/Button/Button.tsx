@@ -7,17 +7,18 @@ import {
 	buttonBorderWidth,
 	buttonGap,
 	buttonHeights,
+	buttonMinSizes,
 	buttonPadding,
 	buttonTypography,
-	buttonWidths,
 	iconSizes,
 } from '../../tokens/Buttons'
+import { ButtonVariants } from '../../types/button'
 
 export interface ButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children?: React.ReactNode
 	onClick?: () => void
-	variant?: 'primary' | 'default' | 'danger' | 'text'
+	variant?: keyof ButtonVariants
 	size?: 'small' | 'medium' | 'large'
 	disabled?: boolean
 	icon?: React.ReactNode
@@ -35,6 +36,7 @@ export interface ButtonProps
 		| 'dialog'
 	'aria-expanded'?: boolean | 'false' | 'true'
 	'aria-controls'?: string
+	onKeyDown?: (e: React.KeyboardEvent<HTMLButtonElement>) => void
 }
 
 // Добавляем тип для пропсов StyledButton, включая theme и новые пропсы
@@ -58,15 +60,11 @@ const StyledButton = styled.button<StyledButtonProps>`
 
 	${({ size = 'medium', hasIcon, hasChildren }) => css`
 		min-width: ${hasIcon && !hasChildren
-			? buttonWidths.iconOnly.mobile[size]
-			: buttonWidths.mobile[size]};
-		min-height: ${buttonHeights.mobile[size]};
-		padding-top: ${hasIcon && !hasChildren
-			? buttonPadding.mobile.iconOnly.vertical
-			: buttonPadding.mobile[size].vertical};
-		padding-bottom: ${hasIcon && !hasChildren
-			? buttonPadding.mobile.iconOnly.vertical
-			: buttonPadding.mobile[size].vertical};
+			? buttonMinSizes.iconOnly.mobile[size]
+			: 'auto'};
+		height: ${hasIcon && !hasChildren
+			? buttonMinSizes.iconOnly.mobile[size]
+			: buttonHeights.mobile[size]};
 		padding-left: ${hasIcon && !hasChildren
 			? buttonPadding.mobile.iconOnly.horizontal
 			: buttonPadding.mobile[size].horizontal};
@@ -90,15 +88,11 @@ const StyledButton = styled.button<StyledButtonProps>`
 	@media (min-width: ${props => props.theme.breakpoints.tablet}) {
 		${({ size = 'medium', hasIcon, hasChildren }) => css`
 			min-width: ${hasIcon && !hasChildren
-				? buttonWidths.iconOnly.tablet[size]
-				: buttonWidths.tablet[size]};
-			min-height: ${buttonHeights.tablet[size]};
-			padding-top: ${hasIcon && !hasChildren
-				? buttonPadding.tablet.iconOnly.vertical
-				: buttonPadding.tablet[size].vertical};
-			padding-bottom: ${hasIcon && !hasChildren
-				? buttonPadding.tablet.iconOnly.vertical
-				: buttonPadding.tablet[size].vertical};
+				? buttonMinSizes.iconOnly.tablet[size]
+				: 'auto'};
+			height: ${hasIcon && !hasChildren
+				? buttonMinSizes.iconOnly.tablet[size]
+				: buttonHeights.tablet[size]};
 			padding-left: ${hasIcon && !hasChildren
 				? buttonPadding.tablet.iconOnly.horizontal
 				: buttonPadding.tablet[size].horizontal};
@@ -120,19 +114,14 @@ const StyledButton = styled.button<StyledButtonProps>`
 	}
 
 	/* Desktop */
-	/* Desktop */
 	@media (min-width: ${props => props.theme.breakpoints.desktop}) {
 		${({ size = 'medium', hasIcon, hasChildren }) => css`
 			min-width: ${hasIcon && !hasChildren
-				? buttonWidths.iconOnly.desktop[size]
-				: buttonWidths.desktop[size]};
-			min-height: ${buttonHeights.desktop[size]};
-			padding-top: ${hasIcon && !hasChildren
-				? buttonPadding.desktop.iconOnly.vertical
-				: buttonPadding.desktop[size].vertical};
-			padding-bottom: ${hasIcon && !hasChildren
-				? buttonPadding.desktop.iconOnly.vertical
-				: buttonPadding.desktop[size].vertical};
+				? buttonMinSizes.iconOnly.desktop[size]
+				: 'auto'};
+			height: ${hasIcon && !hasChildren
+				? buttonMinSizes.iconOnly.desktop[size]
+				: buttonHeights.desktop[size]};
 			padding-left: ${hasIcon && !hasChildren
 				? buttonPadding.desktop.iconOnly.horizontal
 				: buttonPadding.desktop[size].horizontal};
@@ -154,7 +143,9 @@ const StyledButton = styled.button<StyledButtonProps>`
 	}
 
 	${({ theme, variant = 'primary' }) => {
-		const variantColors = theme.colors.button[variant]
+		const variantColors = theme.colors.button[
+			variant
+		] as ButtonVariants[typeof variant]
 		let baseStyles = css``
 		let hoverStyles = css``
 		let activeStyles = css``
@@ -169,193 +160,87 @@ const StyledButton = styled.button<StyledButtonProps>`
 			cursor: not-allowed;
 		`
 
-		if (variant === 'primary') {
-			if (
-				'defaultShadow' in variantColors &&
-				'hoverText' in variantColors &&
-				'activeText' in variantColors &&
-				'focusBackground' in variantColors &&
-				'focusText' in variantColors &&
-				'focusShadow' in variantColors
-			) {
-				baseStyles = css`
-					background-color: ${variantColors.background};
-					color: ${variantColors.text};
-					border-color: transparent; // У primary нет видимой рамки по умолчанию
-					box-shadow: 0px 1px 0px 2px ${variantColors.defaultShadow}; // Тень по умолчанию
-				`
-				hoverStyles = css`
-					background-color: ${variantColors.hoverBackground};
-					color: ${variantColors.hoverText};
-					box-shadow: none; // Убираем тень при ховере
-				`
-				activeStyles = css`
-					background-color: ${variantColors.activeBackground};
-					color: ${variantColors.activeText};
-					box-shadow: none; // Убираем тень при активации
-				`
-				focusStyles = css`
-					background-color: ${variantColors.focusBackground};
-					color: ${variantColors.focusText};
-					border-color: transparent;
-					/* Применяем тень для фокуса */
-					/* Mobile */
-					box-shadow: 0 0 0 4px ${variantColors.focusShadow};
-					/* Tablet */
-					@media (min-width: ${theme.breakpoints.tablet}) {
-						box-shadow: 0 0 0 4px ${variantColors.focusShadow};
-					}
-					/* Desktop */
-					@media (min-width: ${theme.breakpoints.desktop}) {
-						box-shadow: 0 0 0 4px ${variantColors.focusShadow};
-					}
-				`
-			}
+		if (variant === 'primary' || variant === 'danger') {
+			const colors = variantColors as ButtonVariants['primary']
+			baseStyles = css`
+				background-color: ${colors.background};
+				color: ${colors.text};
+				border-color: transparent;
+				box-shadow: 0px 1px 0px 2px ${colors.defaultShadow};
+			`
+			hoverStyles = css`
+				background-color: ${colors.hoverBackground};
+				color: ${colors.hoverText};
+				box-shadow: none;
+			`
+			activeStyles = css`
+				background-color: ${colors.activeBackground};
+				color: ${colors.activeText};
+				box-shadow: none;
+			`
+			focusStyles = css`
+				background-color: ${colors.focusBackground};
+				color: ${colors.focusText};
+				border-color: transparent;
+				box-shadow: 0 0 0 4px ${colors.focusShadow};
+			`
 		} else if (variant === 'default') {
-			if (
-				'hoverBorder' in variantColors &&
-				'activeBorder' in variantColors &&
-				'focusBorder' in variantColors &&
-				'focusShadow' in variantColors
-			) {
-				baseStyles = css`
-					background-color: ${variantColors.background};
-					color: ${variantColors.text};
-					border-color: transparent;
-					box-shadow: none;
-				`
-				hoverStyles = css`
-					border-color: ${variantColors.hoverBorder};
-					background-color: ${variantColors.hoverBackground};
-				`
-				activeStyles = css`
-					border-color: ${variantColors.activeBorder};
-					background-color: ${variantColors.activeBackground};
-				`
-				focusStyles = css`
-					border-color: ${variantColors.focusBorder};
-					/* Применяем тень как вторую рамку */
-					/* Mobile */
-					box-shadow: 0 0 0 ${buttonBorderWidth.mobile}
-						${variantColors.focusShadow};
-					/* Tablet */
-					@media (min-width: ${theme.breakpoints.tablet}) {
-						box-shadow: 0 0 0 ${buttonBorderWidth.tablet}
-							${variantColors.focusShadow};
-					}
-					/* Desktop */
-					@media (min-width: ${theme.breakpoints.desktop}) {
-						box-shadow: 0 0 0 ${buttonBorderWidth.desktop}
-							${variantColors.focusShadow};
-					}
-				`
-			}
-		} else if (variant === 'danger') {
-			if (
-				'defaultShadow' in variantColors &&
-				'hoverBackground' in variantColors &&
-				'hoverText' in variantColors &&
-				'activeBackground' in variantColors &&
-				'activeText' in variantColors &&
-				'focusBackground' in variantColors &&
-				'focusText' in variantColors &&
-				'focusShadow' in variantColors
-			) {
-				baseStyles = css`
-					background-color: ${variantColors.background};
-					color: ${variantColors.text};
-					border-color: transparent;
-					box-shadow: 0px 1px 0px 2px ${variantColors.defaultShadow};
-				`
-				hoverStyles = css`
-					background-color: ${variantColors.hoverBackground};
-					color: ${variantColors.hoverText};
-					box-shadow: none;
-				`
-				activeStyles = css`
-					background-color: ${variantColors.activeBackground};
-					color: ${variantColors.activeText};
-					box-shadow: none;
-				`
-				focusStyles = css`
-					background-color: ${variantColors.focusBackground};
-					color: ${variantColors.focusText};
-					border-color: transparent;
-					/* Применяем тень для фокуса */
-					/* Mobile */
-					box-shadow: 0 0 0 4px ${variantColors.focusShadow};
-					/* Tablet */
-					@media (min-width: ${theme.breakpoints.tablet}) {
-						box-shadow: 0 0 0 4px ${variantColors.focusShadow};
-					}
-					/* Desktop */
-					@media (min-width: ${theme.breakpoints.desktop}) {
-						box-shadow: 0 0 0 4px ${variantColors.focusShadow};
-					}
-				`
-			}
-		} else if (variant === 'text') {
-			if (
-				'hoverBackground' in variantColors &&
-				'hoverText' in variantColors &&
-				'hoverShadow' in variantColors &&
-				'activeBackground' in variantColors &&
-				'activeText' in variantColors &&
-				'focusBackground' in variantColors &&
-				'focusText' in variantColors &&
-				'focusShadow' in variantColors
-			) {
-				baseStyles = css`
-					background-color: ${variantColors.background}; // transparent
-					color: ${variantColors.text};
-					border-color: transparent;
-					box-shadow: none;
-				`
-				hoverStyles = css`
-					background-color: ${variantColors.hoverBackground};
-					color: ${variantColors.hoverText};
-					box-shadow: 0px 1px 0px 2px ${variantColors.hoverShadow}; // Тень снизу
-				`
-				activeStyles = css`
-					background-color: ${variantColors.activeBackground};
-					color: ${variantColors.activeText};
-					box-shadow: none;
-				`
-				focusStyles = css`
-					background-color: ${variantColors.focusBackground};
-					color: ${variantColors.focusText};
-					border-color: transparent;
-					/* Тень для фокуса */
-					/* Mobile */
-					box-shadow: 0 0 0 4px ${variantColors.focusShadow};
-					/* Tablet */
-					@media (min-width: ${theme.breakpoints.tablet}) {
-						box-shadow: 0 0 0 4px ${variantColors.focusShadow};
-					}
-					/* Desktop */
-					@media (min-width: ${theme.breakpoints.desktop}) {
-						box-shadow: 0 0 0 4px ${variantColors.focusShadow};
-					}
-				`
-			}
+			const colors = variantColors as ButtonVariants['default']
+			baseStyles = css`
+				background-color: ${colors.background};
+				color: ${colors.text};
+				border-color: transparent;
+				box-shadow: none;
+			`
+			hoverStyles = css`
+				border-color: ${colors.hoverBorder};
+				background-color: ${colors.hoverBackground};
+			`
+			activeStyles = css`
+				border-color: ${colors.activeBorder};
+				background-color: ${colors.activeBackground};
+			`
+			focusStyles = css`
+				border-color: ${colors.focusBorder};
+				box-shadow: 0 0 0 4px ${colors.focusShadow};
+			`
+		} else {
+			// text variant
+			const colors = variantColors as ButtonVariants['text']
+			baseStyles = css`
+				background-color: ${colors.background};
+				color: ${colors.text};
+				border-color: transparent;
+				box-shadow: none;
+			`
+			hoverStyles = css`
+				background-color: ${colors.hoverBackground};
+				color: ${colors.text};
+				box-shadow: 0px 1px 2px ${colors.hoverShadow};
+			`
+			activeStyles = css`
+				background-color: ${colors.activeBackground};
+				color: ${colors.text};
+				box-shadow: none;
+			`
+			focusStyles = css`
+				background-color: ${colors.focusBackground};
+				color: ${colors.text};
+				box-shadow: 0 0 0 4px ${colors.focusShadow};
+			`
 		}
 
-		// Собираем все стили вместе
 		return css`
 			${baseStyles}
-
 			&:hover:not(:disabled) {
 				${hoverStyles}
 			}
-
 			&:active:not(:disabled) {
 				${activeStyles}
 			}
-
-			&:focus-visible:not(:disabled) {
+			&:focus-visible {
 				${focusStyles}
 			}
-
 			&:disabled {
 				${disabledStyles}
 			}
@@ -371,36 +256,46 @@ const Button: React.FC<ButtonProps> = ({
 	disabled = false,
 	icon,
 	iconPosition = 'left',
-	// Явно извлекаем aria-* пропсы, чтобы передать их дальше
 	'aria-label': ariaLabel,
 	'aria-describedby': ariaDescribedBy,
 	'aria-haspopup': ariaHasPopup,
 	'aria-expanded': ariaExpanded,
 	'aria-controls': ariaControls,
-	...props // Остальные пропсы, включая стандартные HTML атрибуты
+	onKeyDown,
+	...props
 }) => {
 	const theme = useTheme() as Theme
-	const hasIcon = !!icon
-	const hasChildren = React.Children.count(children) > 0
+	const hasIcon = Boolean(icon)
+	const hasChildren = Boolean(children)
+
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+		if (e.key === 'Enter' && !disabled && onClick) {
+			onClick()
+		}
+		if (onKeyDown) {
+			onKeyDown(e)
+		}
+	}
 
 	return (
 		<StyledButton
-			theme={theme}
+			onClick={onClick}
 			variant={variant}
 			size={size}
 			disabled={disabled}
-			onClick={onClick}
 			hasIcon={hasIcon}
 			hasChildren={hasChildren}
+			theme={theme}
 			aria-label={ariaLabel}
 			aria-describedby={ariaDescribedBy}
 			aria-haspopup={ariaHasPopup}
 			aria-expanded={ariaExpanded}
 			aria-controls={ariaControls}
+			onKeyDown={handleKeyDown}
 			{...props}
 		>
 			{hasIcon && iconPosition === 'left' && icon}
-			{hasChildren && <span>{children}</span>}
+			{children}
 			{hasIcon && iconPosition === 'right' && icon}
 		</StyledButton>
 	)
