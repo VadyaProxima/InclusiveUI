@@ -162,10 +162,10 @@ export const AllVariants: StoryFn<AvatarProps> = args => (
 				<h3>Круглые аватары</h3>
 				<div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
 					<Avatar {...CircleWithImage.args} />
-					<Avatar {...CircleWithImage.args} badge="99" />
+					<Avatar {...CircleWithImage.args} badge="3" />
 					<Avatar {...CircleWithImage.args} showDot={true} />
 					<Avatar {...CircleWithLetter.args} />
-					<Avatar {...CircleWithLetter.args} badge="99" />
+					<Avatar {...CircleWithLetter.args} badge="3" />
 					<Avatar {...CircleWithLetter.args} showDot={true} />
 				</div>
 			</div>
@@ -174,10 +174,10 @@ export const AllVariants: StoryFn<AvatarProps> = args => (
 				<h3>Скругленные аватары</h3>
 				<div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
 					<Avatar {...RoundedWithImage.args} />
-					<Avatar {...RoundedWithImage.args} badge="99" />
+					<Avatar {...RoundedWithImage.args} badge="3" />
 					<Avatar {...RoundedWithImage.args} showDot={true} />
 					<Avatar {...RoundedWithLetter.args} />
-					<Avatar {...RoundedWithLetter.args} badge="99" />
+					<Avatar {...RoundedWithLetter.args} badge="3" />
 					<Avatar {...RoundedWithLetter.args} showDot={true} />
 				</div>
 			</div>

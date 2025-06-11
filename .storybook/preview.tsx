@@ -1,7 +1,14 @@
-import { ThemeProvider } from '@emotion/react'
+import { Global, ThemeProvider, css } from '@emotion/react'
 import { Preview } from '@storybook/react'
 import React from 'react'
+import '../src/styles/global.css'
 import { darkTheme, lightTheme } from '../src/theme'
+
+const globalStyles = css`
+	.input-full-width {
+		width: 100% !important;
+	}
+`
 
 const preview: Preview = {
 	parameters: {
@@ -33,6 +40,7 @@ const preview: Preview = {
 			const theme = context.globals.theme === 'dark' ? darkTheme : lightTheme
 			return (
 				<ThemeProvider theme={theme}>
+					<Global styles={globalStyles} />
 					<Story />
 				</ThemeProvider>
 			)

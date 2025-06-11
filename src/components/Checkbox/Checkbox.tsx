@@ -22,6 +22,8 @@ interface CheckboxProps {
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 	label?: string
 	id?: string
+	'aria-label'?: string
+	'aria-describedby'?: string
 }
 
 // Интерфейс для группы чекбоксов
@@ -226,6 +228,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 	onChange,
 	label,
 	id,
+	'aria-label': ariaLabel,
+	'aria-describedby': ariaDescribedBy,
 	...rest
 }) => {
 	const checkboxRef = React.useRef<HTMLInputElement>(null)
@@ -241,6 +245,19 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 		}
 	}, [indeterminate])
 
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === ' ' && !disabled) {
+			e.preventDefault()
+			if (onChange) {
+				onChange({
+					target: {
+						checked: !checked,
+					},
+				} as React.ChangeEvent<HTMLInputElement>)
+			}
+		}
+	}
+
 	return (
 		<StyledWrapper disabled={disabled} htmlFor={uniqueId}>
 			<CheckboxPadding>
@@ -250,8 +267,11 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 					checked={checked}
 					disabled={disabled}
 					onChange={onChange}
-					indeterminate={indeterminate}
 					id={uniqueId}
+					aria-label={ariaLabel || label}
+					aria-describedby={ariaDescribedBy}
+					aria-checked={indeterminate ? 'mixed' : checked}
+					onKeyDown={handleKeyDown}
 					{...rest}
 				/>
 			</CheckboxPadding>

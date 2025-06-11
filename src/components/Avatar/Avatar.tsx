@@ -112,8 +112,10 @@ const AvatarImage = styled.img`
 	border-radius: inherit;
 `
 
-const LetterContainer = styled.div`
-	color: ${colors.light.neutral.white};
+const LetterContainer = styled.div<{
+	device?: 'desktop' | 'tablet' | 'mobile'
+}>`
+	color: ${colors.light.neutral.black};
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -129,6 +131,17 @@ const LetterContainer = styled.div`
 		line-height: 1 !important;
 		transform: translate(-0.5px, -1px);
 		text-align: center;
+		font-size: ${({ device }) => {
+			switch (device) {
+				case 'mobile':
+					return '1.125rem' // 18px
+				case 'tablet':
+					return '1.25rem' // 20px
+				case 'desktop':
+				default:
+					return '1.25rem' // 20px
+			}
+		}};
 	}
 `
 
@@ -157,6 +170,21 @@ const Badge = styled.div<BadgeStyledProps>`
 			border: 1px solid ${colors.light.gray[50]};
 		`}
 	${getBadgeDeviceStyles}
+
+	/* Стили для Typography внутри */
+	> * {
+		font-size: ${({ device }) => {
+			switch (device) {
+				case 'mobile':
+					return '0.875rem' // 14px
+				case 'tablet':
+					return '0.9375rem' // 15px
+				case 'desktop':
+				default:
+					return '1rem' // 16px
+			}
+		}};
+	}
 `
 
 export const Avatar: React.FC<AvatarProps> = ({
@@ -190,10 +218,10 @@ export const Avatar: React.FC<AvatarProps> = ({
 				{src ? (
 					<AvatarImage src={src} alt={alt} />
 				) : (
-					<LetterContainer>
+					<LetterContainer device={device}>
 						<Typography
 							variant="bodyLargeBold"
-							color="white"
+							color="black"
 							style={{
 								width: '100%',
 								height: '100%',
