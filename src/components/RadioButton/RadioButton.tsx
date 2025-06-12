@@ -1,7 +1,6 @@
-import { css, useTheme } from '@emotion/react'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React from 'react'
-import { Theme } from '../../theme'
 import { colors } from '../../tokens/colors'
 import {
 	radioButtonBorderRadius,
@@ -26,6 +25,8 @@ interface RadioButtonProps {
 	id?: string
 	name?: string
 	value?: string
+	'aria-label'?: string
+	'aria-describedby'?: string
 }
 
 // Интерфейс для группы радиокнопок
@@ -171,26 +172,21 @@ const RadioButtonPadding = styled.div`
 	}
 `
 
-// Стили для лейбла радиокнопки
-const StyledLabel = styled.span<{
-	disabled?: boolean
-}>`
+const RadioButtonContainer = styled.div`
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+`
+
+const StyledLabel = styled.label<{ disabled?: boolean }>`
 	font-family: ${fontFamily.sans};
 	font-size: ${fontSizes.mobile.paragraph};
 	line-height: ${lineHeights.mobile.paragraph};
 	font-weight: ${fontWeights.paragraph};
-	color: ${({ disabled }) =>
-		disabled ? colors.light.gray[500] : colors.light.gray[1000]};
-
-	@media (min-width: ${p => p.theme.breakpoints.tablet}) {
-		font-size: ${fontSizes.tablet.paragraph};
-		line-height: ${lineHeights.tablet.paragraph};
-	}
-
-	@media (min-width: ${p => p.theme.breakpoints.desktop}) {
-		font-size: ${fontSizes.desktop.paragraph};
-		line-height: ${lineHeights.desktop.paragraph};
-	}
+	color: ${({ disabled, theme }) =>
+		disabled ? theme.colors.text.Disabled : theme.colors.text.Base};
+	cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
+	user-select: none;
 `
 
 // Стилизованная группа радиокнопок
@@ -210,33 +206,30 @@ export const RadioButton: React.FC<RadioButtonProps> = ({
 	onChange,
 	label,
 	id,
-	name,
-	value,
+	'aria-label': ariaLabel,
+	'aria-describedby': ariaDescribedBy,
 	...rest
 }) => {
-	const theme = useTheme() as Theme
-	const uniqueId = React.useMemo(
-		() => id || `radio-${Math.random().toString(36).substring(2, 11)}`,
-		[id]
-	)
+	const radioId = id || `radio-${Math.random().toString(36).substr(2, 9)}`
 
 	return (
-		<StyledWrapper disabled={disabled} htmlFor={uniqueId}>
-			<RadioButtonPadding>
-				<StyledRadioButton
-					type="radio"
-					checked={checked}
-					disabled={disabled}
-					onChange={onChange}
-					theme={theme}
-					id={uniqueId}
-					name={name}
-					value={value}
-					{...rest}
-				/>
-			</RadioButtonPadding>
-			{label && <StyledLabel disabled={disabled}>{label}</StyledLabel>}
-		</StyledWrapper>
+		<RadioButtonContainer>
+			<StyledRadioButton
+				id={radioId}
+				type="radio"
+				checked={checked}
+				disabled={disabled}
+				onChange={onChange}
+				aria-label={label ? undefined : ariaLabel}
+				aria-describedby={ariaDescribedBy}
+				{...rest}
+			/>
+			{label && (
+				<StyledLabel htmlFor={radioId} disabled={disabled}>
+					{label}
+				</StyledLabel>
+			)}
+		</RadioButtonContainer>
 	)
 }
 

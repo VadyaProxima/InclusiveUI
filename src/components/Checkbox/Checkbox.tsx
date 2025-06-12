@@ -173,26 +173,22 @@ const CheckboxPadding = styled.div`
 	}
 `
 
-// Стили для лейбла чекбокса
-const StyledLabel = styled.span<{
-	disabled?: boolean
-}>`
+const CheckboxContainer = styled.div`
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+`
+
+const StyledLabel = styled.label<{ disabled?: boolean }>`
+	/* Стили для текста метки */
 	font-family: ${fontFamily.sans};
 	font-size: ${fontSizes.mobile.paragraph};
 	line-height: ${lineHeights.mobile.paragraph};
 	font-weight: ${fontWeights.paragraph};
 	color: ${({ disabled, theme }) =>
 		disabled ? theme.colors.text.Disabled : theme.colors.text.Base};
-
-	@media (min-width: ${p => p.theme.breakpoints.tablet}) {
-		font-size: ${fontSizes.tablet.paragraph};
-		line-height: ${lineHeights.tablet.paragraph};
-	}
-
-	@media (min-width: ${p => p.theme.breakpoints.desktop}) {
-		font-size: ${fontSizes.desktop.paragraph};
-		line-height: ${lineHeights.desktop.paragraph};
-	}
+	cursor: ${p => (p.disabled ? 'not-allowed' : 'pointer')};
+	user-select: none;
 `
 
 // Стилизованная группа чекбоксов
@@ -232,51 +228,35 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 	'aria-describedby': ariaDescribedBy,
 	...rest
 }) => {
+	const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`
 	const checkboxRef = React.useRef<HTMLInputElement>(null)
-	const uniqueId = React.useMemo(
-		() => id || `checkbox-${Math.random().toString(36).substring(2, 11)}`,
-		[id]
-	)
 
-	// Управляем indeterminate через ref
 	React.useEffect(() => {
 		if (checkboxRef.current) {
 			checkboxRef.current.indeterminate = indeterminate
 		}
 	}, [indeterminate])
 
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === ' ' && !disabled) {
-			e.preventDefault()
-			if (onChange) {
-				onChange({
-					target: {
-						checked: !checked,
-					},
-				} as React.ChangeEvent<HTMLInputElement>)
-			}
-		}
-	}
-
 	return (
-		<StyledWrapper disabled={disabled} htmlFor={uniqueId}>
-			<CheckboxPadding>
-				<StyledCheckbox
-					ref={checkboxRef}
-					type="checkbox"
-					checked={checked}
-					disabled={disabled}
-					onChange={onChange}
-					id={uniqueId}
-					aria-label={ariaLabel || label}
-					aria-describedby={ariaDescribedBy}
-					aria-checked={indeterminate ? 'mixed' : checked}
-					onKeyDown={handleKeyDown}
-					{...rest}
-				/>
-			</CheckboxPadding>
-			{label && <StyledLabel disabled={disabled}>{label}</StyledLabel>}
-		</StyledWrapper>
+		<CheckboxContainer>
+			<StyledCheckbox
+				ref={checkboxRef}
+				id={checkboxId}
+				type="checkbox"
+				checked={checked}
+				disabled={disabled}
+				onChange={onChange}
+				indeterminate={indeterminate}
+				aria-label={label ? undefined : ariaLabel}
+				aria-describedby={ariaDescribedBy}
+				{...rest}
+			/>
+			{label && (
+				<StyledLabel htmlFor={checkboxId} disabled={disabled}>
+					{label}
+				</StyledLabel>
+			)}
+		</CheckboxContainer>
 	)
 }
 

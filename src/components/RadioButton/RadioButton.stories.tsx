@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@emotion/react'
 import { Meta, StoryObj } from '@storybook/react'
 import { useState } from 'react'
+import React from 'react'
 import { lightTheme } from '../../theme'
 import { RadioButton, RadioButtonGroup } from './RadioButton'
 
@@ -137,6 +138,7 @@ export const WithLabelResponsive: Story = {
 								onChange={handleChange('option1')}
 								name={`demo-${device}`}
 								value="option1"
+
 								label="Опция 1"
 							/>
 							<RadioButton

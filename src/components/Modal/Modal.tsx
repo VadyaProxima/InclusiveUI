@@ -46,23 +46,25 @@ export interface ModalProps {
 	confirmButtonVariant?: 'primary' | 'default' | 'text' | 'danger'
 	// Styling & Accessibility
 	className?: string
+	style?: React.CSSProperties
 	ariaLabelledby?: string
 	ariaDescribedby?: string
 }
 
 // --- Styled Components ---
 
-const ModalOverlay = styled.div`
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5); // Standard overlay color
+const ModalOverlay = styled.div<{ isStatic?: boolean }>`
+	position: ${props => (props.isStatic ? 'static' : 'fixed')};
+	top: ${props => (props.isStatic ? 'auto' : '0')};
+	left: ${props => (props.isStatic ? 'auto' : '0')};
+	width: ${props => (props.isStatic ? 'auto' : '100%')};
+	height: ${props => (props.isStatic ? 'auto' : '100%')};
+	background-color: ${props =>
+		props.isStatic ? 'transparent' : 'rgba(0, 0, 0, 0.5)'};
 	display: flex;
-	align-items: center;
+	align-items: ${props => (props.isStatic ? 'flex-start' : 'center')};
 	justify-content: center;
-	z-index: 1000; // Ensure it's on top
+	z-index: ${props => (props.isStatic ? 'auto' : '1000')};
 `
 
 const ModalContainer = styled.div`
@@ -222,6 +224,7 @@ const Modal: React.FC<ModalProps> = ({
 	onConfirm,
 	confirmButtonVariant = 'primary',
 	className,
+	style,
 	ariaLabelledby,
 	ariaDescribedby,
 }) => {
@@ -314,8 +317,19 @@ const Modal: React.FC<ModalProps> = ({
 	const hasStatusContent = statusTitle || statusContent
 
 	return (
-		<ModalOverlay onClick={handleOverlayClick}>
-			<ModalContainer className={className}>
+		<ModalOverlay
+			onClick={handleOverlayClick}
+			isStatic={style?.position === 'static'}
+		>
+			<ModalContainer
+				onClick={e => e.stopPropagation()}
+				className={className}
+				style={style}
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby={ariaLabelledby}
+				aria-describedby={ariaDescribedby}
+			>
 				{(title || !hideCloseButton) && (
 					<ModalHeader>
 						{title && (

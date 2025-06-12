@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import React from 'react'
 import {
 	InputValidationStatus,
@@ -24,15 +23,8 @@ export interface InputWithValidationProps extends Omit<InputProps, 'status'> {
 	warningIcon?: React.ReactNode
 	successIcon?: React.ReactNode
 	validateOnChange?: boolean // Новый проп для управления валидацией при вводе
+	label?: string
 }
-
-// Контейнер для инпута с сообщением валидации
-const InputContainer = styled.div`
-	font-family: Open Sans;
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-`
 
 export const InputWithValidation: React.FC<InputWithValidationProps> = ({
 	name,
@@ -45,6 +37,7 @@ export const InputWithValidation: React.FC<InputWithValidationProps> = ({
 	warningIcon,
 	successIcon,
 	validateOnChange = true, // По умолчанию валидируем при каждом изменении
+	label,
 	...inputProps
 }) => {
 	// Используем хук для валидации
@@ -105,9 +98,11 @@ export const InputWithValidation: React.FC<InputWithValidationProps> = ({
 	}
 
 	return (
-		<InputContainer>
+	
+   <>
 			<Input
 				{...inputProps}
+				label={label}
 				name={name}
 				value={value}
 				onChange={onChangeHandler}
@@ -115,8 +110,14 @@ export const InputWithValidation: React.FC<InputWithValidationProps> = ({
 				status={isDirty ? status : 'default'}
 				rightIcon={getRightIcon()}
 			/>
-			<ValidationMessage status={status} message={message} />
-		</InputContainer>
+			<ValidationMessage 
+			  aria-live="assertive"	
+			  aria-atomic="true"
+			  status={status} message={message} />
+			
+	</>
+		
+		
 	)
 }
 

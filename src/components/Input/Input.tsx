@@ -1,7 +1,6 @@
-import { css, useTheme } from '@emotion/react'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { InputHTMLAttributes, ReactNode } from 'react'
-import { Theme } from '../../theme'
 import {
 	inputBorderRadius,
 	inputHeight,
@@ -45,6 +44,7 @@ const InputContainer = styled.div`
 const StyledLabel = styled.label<{
 	disabled?: boolean
 }>`
+	display: block;
 	font-family: ${fontFamily.sans};
 	font-size: ${fontSizes.mobile.label};
 	line-height: ${lineHeights.mobile.label};
@@ -344,24 +344,9 @@ export const Input: React.FC<InputProps> = ({
 	onKeyDown,
 	...props
 }) => {
-	const theme = useTheme() as Theme
-	const hasLeftIcon = Boolean(leftIcon)
-	const hasRightIcon = Boolean(rightIcon)
-	const uniqueId = React.useMemo(
-		() => id || `input-${Math.random().toString(36).substring(2, 11)}`,
-		[id]
-	)
-
-	// Генерируем уникальный ID для label если он есть
-	const labelId = label ? `${uniqueId}-label` : undefined
-
-	// Автоматически устанавливаем aria-invalid на основе status
-	const computedAriaInvalid = ariaInvalid ?? status === 'danger'
+	const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Escape') {
-			e.currentTarget.blur()
-		}
 		if (onKeyDown) {
 			onKeyDown(e)
 		}
@@ -370,25 +355,23 @@ export const Input: React.FC<InputProps> = ({
 	return (
 		<InputContainer>
 			{label && (
-				<StyledLabel id={labelId} htmlFor={uniqueId} disabled={disabled}>
+				<StyledLabel htmlFor={inputId} disabled={disabled}>
 					{label}
 				</StyledLabel>
 			)}
 			<InputWrapper>
 				{leftIcon && <IconWrapper position="left">{leftIcon}</IconWrapper>}
 				<StyledInput
-					id={uniqueId}
+					id={inputId}
+					hasLeftIcon={!!leftIcon}
+					hasRightIcon={!!rightIcon}
 					disabled={disabled}
-					hasLeftIcon={hasLeftIcon}
-					hasRightIcon={hasRightIcon}
 					status={status}
 					aria-label={ariaLabel}
-					aria-labelledby={label ? labelId : undefined}
 					aria-describedby={ariaDescribedBy}
-					aria-invalid={computedAriaInvalid}
+					aria-invalid={ariaInvalid}
 					aria-required={ariaRequired}
 					aria-autocomplete={ariaAutocomplete}
-					aria-disabled={disabled}
 					onKeyDown={handleKeyDown}
 					{...props}
 				/>

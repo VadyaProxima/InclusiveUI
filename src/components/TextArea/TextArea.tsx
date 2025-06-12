@@ -19,11 +19,16 @@ import {
 	lineHeights,
 } from '../../tokens/Typography'
 
-// Типы пропсов текстового поля
+// Типы пропсов для TextArea
 export interface TextAreaProps
 	extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-	label?: string
 	status?: 'default' | 'success' | 'warning' | 'danger'
+	label?: string
+	id?: string
+	'aria-label': string
+	'aria-describedby'?: string
+	'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling'
+	'aria-required'?: boolean | 'false' | 'true'
 }
 
 // Обертка для всего компонента
@@ -198,32 +203,39 @@ const StyledTextArea = styled.textarea<{
 `
 
 export const TextArea: React.FC<TextAreaProps> = ({
-	label,
-	id,
 	disabled = false,
 	status = 'default',
+	label,
+	id,
+	'aria-label': ariaLabel,
+	'aria-describedby': ariaDescribedBy,
+	'aria-invalid': ariaInvalid,
+	'aria-required': ariaRequired,
 	...props
 }) => {
 	const theme = useTheme() as Theme
-	const uniqueId = React.useMemo(
-		() => id || `textarea-${Math.random().toString(36).substring(2, 11)}`,
-		[id]
-	)
+	const textareaId = id || `textarea-${Math.random().toString(36).substr(2, 9)}`
 
 	return (
 		<TextAreaContainer>
 			{label && (
-				<StyledLabel htmlFor={uniqueId} disabled={disabled}>
+				<StyledLabel htmlFor={textareaId} disabled={disabled}>
 					{label}
 				</StyledLabel>
 			)}
 			<StyledTextArea
-				id={uniqueId}
+				id={textareaId}
 				disabled={disabled}
 				status={status}
+				aria-label={ariaLabel}
+				aria-describedby={ariaDescribedBy}
+				aria-invalid={ariaInvalid}
+				aria-required={ariaRequired}
 				theme={theme}
 				{...props}
 			/>
 		</TextAreaContainer>
 	)
 }
+
+export default TextArea

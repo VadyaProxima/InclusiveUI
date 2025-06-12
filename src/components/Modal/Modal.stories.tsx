@@ -1,8 +1,47 @@
+import styled from '@emotion/styled'
 import type { Meta, StoryObj } from '@storybook/react'
 import React, { useState } from 'react'
+import {
+	buttonHeights,
+	buttonPadding,
+	buttonTypography,
+} from '../../tokens/Buttons'
+import { modalHeight, modalWidth } from '../../tokens/Modal'
+import { fontSizes } from '../../tokens/Typography'
 import Button from '../Button/Button'
 import Typography from '../Typography/Typography'
 import Modal from './Modal'
+
+const devices = ['desktop', 'tablet', 'mobile'] as const
+
+const PageWrapper = styled.div`
+	padding: 48px;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f5f5f5;
+`
+
+const ResponsiveWrapper = styled.div`
+	display: flex;
+	gap: 48px;
+	align-items: flex-start;
+`
+
+const DeviceContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+`
+
+const DeviceTitle = styled.h3`
+	margin: 0;
+	margin-bottom: 8px;
+	font-size: 1.5rem;
+	font-weight: 600;
+`
 
 const meta = {
 	title: 'Components/Modal',
@@ -66,8 +105,6 @@ const ModalTemplate: Story = {
 	},
 }
 
-// --- Stories ---
-
 export const Basic: Story = {
 	...ModalTemplate,
 	args: {
@@ -128,5 +165,86 @@ export const Danger: Story = {
 		...Info.args,
 		variant: 'error',
 		statusTitle: 'This is an error message',
+	},
+}
+
+export const ResponsiveSize: Story = {
+	...ModalTemplate,
+	args: {
+		...Basic.args,
+		title: 'Адаптивные размеры',
+		children: (
+			<>
+				<Typography variant="paragraph" style={{ marginBottom: '16px' }}>
+					Размеры модального окна для разных устройств:
+				</Typography>
+				<Typography variant="paragraph">
+					• Мобильный: {modalWidth.mobile} x {modalHeight.mobile}
+				</Typography>
+				<Typography variant="paragraph">
+					• Планшет: {modalWidth.tablet} x {modalHeight.tablet}
+				</Typography>
+				<Typography variant="paragraph">
+					• Десктоп: {modalWidth.desktop} x {modalHeight.desktop}
+				</Typography>
+			</>
+		),
+		
+		showCancelButton: true,
+		confirmButtonText: 'Понятно',
+		cancelButtonText: 'Закрыть',
+	},
+}
+
+export const Responsive: Story = {
+	parameters: {
+		layout: 'fullscreen',
+	},
+	args: {
+		...Basic.args,
+	},
+	render: () => {
+		return (
+			<PageWrapper>
+				<ResponsiveWrapper>
+					{devices.map(device => (
+						<DeviceContainer key={device}>
+							<DeviceTitle>{device}</DeviceTitle>
+							<Modal
+								{...Basic.args}
+								isOpen={true}
+								onClose={() => {}}
+								style={{
+									position: 'static',
+									width: modalWidth[device],
+									minHeight: modalHeight[device],
+									margin: 0,
+								}}
+							
+							>
+								<Typography
+									variant="paragraph"
+									style={{
+										fontSize: fontSizes[device].paragraph,
+										marginBottom: '24px',
+									}}
+								>
+									Это модальное окно для {device} устройств
+								</Typography>
+								<div
+									style={{
+										display: 'flex',
+										gap: '8px',
+										justifyContent: 'flex-end',
+									}}
+								>
+									
+								</div>
+							</Modal>
+						</DeviceContainer>
+					))}
+				</ResponsiveWrapper>
+			</PageWrapper>
+		)
 	},
 }

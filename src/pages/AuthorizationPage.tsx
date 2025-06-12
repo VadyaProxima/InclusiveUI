@@ -1,8 +1,14 @@
 import styled from '@emotion/styled'
 import { useState } from 'react'
-import { Button, Typography } from '../components'
+import { Button } from '../components'
 import { Checkbox } from '../components/Checkbox'
 import { InputWithValidation } from '../components/Input'
+import {
+	fontFamily,
+	fontSizes,
+	fontWeights,
+	lineHeights,
+} from '../tokens/Typography'
 import { Validators } from '../utils/validation'
 
 const PageContainer = styled.div`
@@ -23,7 +29,7 @@ const FormContainer = styled.div`
 	max-width: 500px;
 	display: flex;
 	flex-direction: column;
-	gap: 24px;
+	gap: 18px;
 
 	&:focus-within {
 		outline: 2px solid ${({ theme }) => theme.colors.input.focus.border};
@@ -31,10 +37,25 @@ const FormContainer = styled.div`
 	}
 `
 
-const Title = styled(Typography)`
+const Title = styled.h1`
 	text-align: center;
 	margin-bottom: 8px;
 	white-space: nowrap;
+	font-family: ${fontFamily.sans};
+	font-size: ${fontSizes.mobile.heading3};
+	line-height: ${lineHeights.mobile.heading3};
+	font-weight: ${fontWeights.heading3};
+	color: ${({ theme }) => theme.colors.text.Heading};
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
+		font-size: ${fontSizes.tablet.heading3};
+		line-height: ${lineHeights.tablet.heading3};
+	}
+
+	@media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+		font-size: ${fontSizes.desktop.heading3};
+		line-height: ${lineHeights.desktop.heading3};
+	}
 `
 
 const CheckboxContainer = styled.div`
@@ -67,9 +88,7 @@ export const AuthorizationPage = () => {
 	return (
 		<PageContainer>
 			<FormContainer role="form" aria-label="Форма авторизации">
-				<Title variant="heading3" id="auth-title">
-					Авторизация
-				</Title>
+				<Title id="auth-title">Авторизация</Title>
 				<InputWithValidation
 					label="Почта"
 					aria-label="Почта"
