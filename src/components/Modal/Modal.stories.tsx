@@ -168,34 +168,6 @@ export const Danger: Story = {
 	},
 }
 
-export const ResponsiveSize: Story = {
-	...ModalTemplate,
-	args: {
-		...Basic.args,
-		title: 'Адаптивные размеры',
-		children: (
-			<>
-				<Typography variant="paragraph" style={{ marginBottom: '16px' }}>
-					Размеры модального окна для разных устройств:
-				</Typography>
-				<Typography variant="paragraph">
-					• Мобильный: {modalWidth.mobile} x {modalHeight.mobile}
-				</Typography>
-				<Typography variant="paragraph">
-					• Планшет: {modalWidth.tablet} x {modalHeight.tablet}
-				</Typography>
-				<Typography variant="paragraph">
-					• Десктоп: {modalWidth.desktop} x {modalHeight.desktop}
-				</Typography>
-			</>
-		),
-		
-		showCancelButton: true,
-		confirmButtonText: 'Понятно',
-		cancelButtonText: 'Закрыть',
-	},
-}
-
 export const Responsive: Story = {
 	parameters: {
 		layout: 'fullscreen',

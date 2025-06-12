@@ -88,7 +88,7 @@ export const AuthorizationPage = () => {
 	return (
 		<PageContainer>
 			<FormContainer role="form" aria-label="Форма авторизации">
-				<Title id="auth-title">Авторизация</Title>
+				<Title aria-label="Авторизация" id="auth-title">Авторизация</Title>
 				<InputWithValidation
 					label="Почта"
 					aria-label="Почта"

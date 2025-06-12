@@ -109,6 +109,7 @@ export const InputWithValidation: React.FC<InputWithValidationProps> = ({
 				onBlur={onBlurHandler}
 				status={isDirty ? status : 'default'}
 				rightIcon={getRightIcon()}
+				
 			/>
 			<ValidationMessage 
 			  aria-live="assertive"	
