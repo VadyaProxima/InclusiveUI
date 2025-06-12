@@ -1,7 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
-import React from 'react'
+import React, { useState } from 'react'
 import { lightTheme } from '../../theme'
 import { RadioButton, RadioButtonGroup } from './RadioButton'
 
@@ -20,30 +19,15 @@ const devices = ['desktop', 'tablet', 'mobile'] as const
 export const AllStates: Story = {
 	render: () => {
 		return (
-			<div style={{ display: 'flex', gap: 32 }}>
-				{devices.map(device => (
-					<div
-						key={device}
-						style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
-					>
-						<div>{device}</div>
-						<RadioButton checked={false} device={device} onChange={() => {}} />
-						<RadioButton checked={true} device={device} onChange={() => {}} />
-						<RadioButton
-							checked={false}
-							disabled={true}
-							device={device}
-							onChange={() => {}}
-						/>
-						<RadioButton
-							checked={true}
-							disabled={true}
-							device={device}
-							onChange={() => {}}
-						/>
-					</div>
-				))}
-			</div>
+			<>
+				<div style={{ marginBottom: 30 }}>Checkbox</div>
+				<div style={{ display: 'flex', gap: 32 }}>
+					<RadioButton checked={false} onChange={() => {}} />
+					<RadioButton checked={true} onChange={() => {}} />
+					<RadioButton checked={false} disabled={true} onChange={() => {}} />
+					<RadioButton checked={true} disabled={true} onChange={() => {}} />
+				</div>
+			</>
 		)
 	},
 }
@@ -138,7 +122,6 @@ export const WithLabelResponsive: Story = {
 								onChange={handleChange('option1')}
 								name={`demo-${device}`}
 								value="option1"
-
 								label="Опция 1"
 							/>
 							<RadioButton

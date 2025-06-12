@@ -25,55 +25,32 @@ const devices = ['desktop', 'tablet', 'mobile'] as const
 export const AllStates: Story = {
 	render: () => {
 		return (
-			<div style={{ display: 'flex', gap: 32 }}>
-				{devices.map(device => (
-					<div
-						key={device}
-						style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
-					>
-						<div>{device}</div>
-						<Checkbox
-							checked={false}
-							indeterminate={false}
-							device={device}
-							onChange={() => {}}
-						/>
-						<Checkbox
-							checked={true}
-							indeterminate={false}
-							device={device}
-							onChange={() => {}}
-						/>
-						<Checkbox
-							checked={false}
-							indeterminate={true}
-							device={device}
-							onChange={() => {}}
-						/>
-						<Checkbox
-							checked={false}
-							indeterminate={false}
-							disabled={true}
-							device={device}
-							onChange={() => {}}
-						/>
-						<Checkbox
-							checked={true}
-							indeterminate={false}
-							disabled={true}
-							device={device}
-							onChange={() => {}}
-						/>
-						<Checkbox
-							checked={false}
-							indeterminate={true}
-							disabled={true}
-							device={device}
-							onChange={() => {}}
-						/>
-					</div>
-				))}
-			</div>
+			<>
+				<div style={{ marginBottom: 30 }}>Checkbox</div>
+				<div style={{ display: 'flex', gap: 32 }}>
+					<Checkbox checked={false} indeterminate={false} onChange={() => {}} />
+					<Checkbox checked={true} indeterminate={false} onChange={() => {}} />
+					<Checkbox checked={false} indeterminate={true} onChange={() => {}} />
+					<Checkbox
+						checked={false}
+						indeterminate={false}
+						disabled={true}
+						onChange={() => {}}
+					/>
+					<Checkbox
+						checked={true}
+						indeterminate={false}
+						disabled={true}
+						onChange={() => {}}
+					/>
+					<Checkbox
+						checked={false}
+						indeterminate={true}
+						disabled={true}
+						onChange={() => {}}
+					/>
+				</div>
+			</>
 		)
 	},
 }
